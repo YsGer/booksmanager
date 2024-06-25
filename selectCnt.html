@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./layui/css/layui.css">
+    <link rel="stylesheet" href="./css/elemetui.css">
+    <script src="./layui/layui.js"> </script>
+    <style>
+        p{
+            text-align: center;
+            font-size: 35px;
+            margin-top: 10px;
+        }
+        h1{
+            text-align: center;
+            font-size: 50px;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+
+        }
+        .questionnaire {
+            background-color: #fff;
+            border-radius: 8px;
+            
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style-type: none;
+            padding: 0;
+        }
+        .options li {
+            display:block;
+            padding: 25px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        } 
+        .options li:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <script src="../js/vue.js"></script>
+    <!-- import JavaScript -->
+    <script src="../js/elementui.js"></script>
+
+    <div id="app" style="height: 100vh;">
+        
+        <div id="content" v-if="flag==0">
+            <div style="display: flex; justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */ height: 10vh;">
+                 
+                  <div  style="flex: 8; align-items: center; display: flex;justify-content: center;">
+                      <h1 id="type_title" style="display: inline-block; text-align: center;"></h1>
+                  </div>
+                  <div style="flex: 2;">
+                      <span style="text-align: center; display: inline-block; width: 100%;" id="username">用户名:</span>
+                      <p></p>
+                      <img  src="./img/user.png"  width="80" alt="">
+                  </div>
+                  
+            
+            </div>
+            <div class="layui-xs-12" style=" height: 80vh; background-color: white;">
+                <div>
+                    <h1 id="type_title" style="font-size: 10px;"></h1>
+                    
+                </div>
+                
+                <div class="layui-xs-12" style="padding: 20px; height: 80%; background-color: white; display: flex; flex-direction: column;">
+                   
+                    <div style="flex: 3; display: flex; justify-content: center; align-items: center;">
+                        <div class="question"></div>
+                    </div>
+                    <div style="flex: 7; ">
+                        
+                          <div class="questionnaire">
+                            
+                            <ul class="options">
+                              <li @click="select_click" class="select">中国     <input  style="display: inline-block; height: 50px; margin-left: 50px;" type="text"></input> </li>
+                              <li @click="select_click" class="select">云南移动</li>
+                              <li @click="select_click" class="select">马上</li>
+                              <li @click="select_click" class="select">你好</li>
+                            </ul>
+                          </div>
+                    </div>
+                </div>
+                <div style="height: 20%; background-color: white;">
+                    <p style="margin-top: 20px;">
+                        <button class="layui-btn layui-btn-primary" @click="previousQuestion">开始刷题</button>
+                        <!-- <button class="layui-btn layui-btn-primary" @click="nextQuestion">下一题</button>
+                        <button v-if="(cnt+1) == totalCnt" id="submitcontent" class="layui-btn layui-btn-primary"   @click="submitQuestion">交卷</button> -->
+                    </p>
+                </div>
+        
+                
+        
+            </div>
+        </div>
+        <!-- <div id="result" style="display: block;" v-else>
+            <p>你的本次测验得分是{{result}}</p>
+
+        </div> -->
+    </div>
+
+
+    <script>
+        //js分离URL参数为字典
+        let url = window.location.href;
+        function getGETParameters(url) {
+  // 创建一个URL对象
+        const urlObj = new URL(url);
+        // 使用URLSearchParams对象获取所有查询参数
+        const params = new URLSearchParams(urlObj.search);
+        // 创建一个空对象来存储参数
+        const parameters = {};
+
+        // 遍历所有参数
+        for (const [key, value] of params) {
+            parameters[key] = value;
+        }
+
+        return parameters;
+        }
+
+        // 使用示例
+       
+        const parameters = getGETParameters(url);
+        console.log(parameters)
+        //获取id为username元素800吗,ij
+        let username = document.getElementById('username');
+        //设置元素的文本内容
+        console.log( parameters.username)
+        username.innerText = '用户名：' + parameters.username;
+        
+
+        
+
+    </script>
+</body>
+</html>

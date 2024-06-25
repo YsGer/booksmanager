@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./js/vue.js"></script>
+    <script src="./js/axios.min.js"></script>
+    <style>
+
+        ul li {
+            text-decoration: none;
+            list-style: none    ;
+        }
+        .collapse-content {
+            width: 24px;
+            height: 24px;
+            background: #fff;
+            border-radius: 4px 4px 4px 4px;
+            opacity: 1;
+            border: 1px solid #d8d8d8;
+            color: #1d2129;
+            font-size: 13px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            position: relative
+        }
+    </style>
+</head>
+<body>
+    
+ 
+
+    <div id="app">
+        <div style="display: flex; height: calc(100vh);">
+            <!-- <ul v-for="item in message">
+                <p>{{item.question}}</p>
+                <li>{{item.A}}</li>
+                <li>{{item.B}}</li>
+                <li>{{item.C}}</li>
+                <li>{{item.D}}</li>
+                <li style="display: none;">{{item.anwser}}</li>
+
+            </ul> -->
+
+
+            <div style="flex: 1.4; display: flex; flex-wrap: wrap; height: 200px; background-color: red; overflow-y: scroll;">
+                <div v-for="(item,index) in items">
+                    <div style="margin-left: 10px;" class="collapse-content">{{index+1}}</div>
+                </div>
+               
+                
+            </div>
+            <div style="flex: 9; background-color: green; height: 100%;">
+
+            </div>
+        </div>
+    </div>
+    <div>
+
+    </div>
+    <div>
+
+    </div>
+    <div>
+
+    </div>
+    <div>
+        
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: [],
+                items: Array.from({ length: 100 }, (_, index) => index),
+
+            },
+            created: function(){
+                this.getdata();
+            },
+            methods: {
+                getdata: function(){
+                    axios.get('http://localhost:5500/assert/1.json')
+                    .then((response)=>{
+                        console.log(response.data.data);
+                        app.message = response.data.data;
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+</html>

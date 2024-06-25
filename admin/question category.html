@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <!-- import CSS -->
+  <link rel="stylesheet" href="../css/elemetui.css">
+  <style>
+      .el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
+  </style>
+</head>
+<body>
+  <div id="app" style="margin: 50px;">
+    <!-- <el-button @click="visible = true">Button</el-button>
+    //添加两个elbutton和el输入框 在一行 -->
+    <el-row>
+      <el-col :span="2">
+        <div></div>
+      </el-col>
+      <el-col :span="2">
+        <el-button @click="handleEdit(1,1,1)"> 新增分类</el-button>
+      </el-col>
+      
+     <el-col :span="10">
+        <el-input @keydown.enter.native="handleKey" v-model="input" placeholder="请输入内容"></el-input>
+    </el-col>
+    
+      <el-col :span="4">
+        <el-button>搜索</el-button>
+      </el-col>
+      <!-- <el-col :span="8" >
+        <el-dropdown @command="handleCommand">
+            <span  class="el-dropdown-link">
+              选择分类<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="a">黄金糕</el-dropdown-item>
+               <el-dropdown-item :command="t.key" v-for="t in contentMenu"> {{t.title}}</el-dropdown-item>
+              <el-dropdown-item command="b">狮子头</el-dropdown-item>
+              <el-dropdown-item command="c">螺蛳粉</el-dropdown-item>
+              <el-dropdown-item command="d" disabled>双皮奶</el-dropdown-item>
+              <el-dropdown-item command="e" divided>蚵仔煎</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </el-col > -->
+    </el-row>
+    <el-table
+    :data="contentMenu"
+    height="500"
+    border
+    style="width: 100%">
+    <el-table-column
+      prop="title"
+      label="分类"
+      width="280">
+    </el-table-column>
+
+    <el-table-column
+      prop="detail"
+      label="分类详情">
+    </el-table-column>
+  
+    
+  </el-table-column>
+  <el-table-column label="操作">
+    <template slot-scope="scope">
+      <el-button
+        size="mini"
+        @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+      <el-button
+        size="mini"
+        type="danger"
+        @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+    </template>
+  </el-table-column>
+  </el-table>
+  <el-dialog title="新增分类" :visible.sync="dialogVisible" width="30%">
+    <el-form :model="editcontentMenu" inline>
+        <el-form-item label="分类名称" :label-width="formLabelWidth" >
+            <el-input v-model="editcontentMenu.title" autocomplete="off"></el-input>
+          </el-form-item>
+      <el-form-item label="分类详情" :label-width="formLabelWidth">
+        <el-input @keydown.enter.native="saveEdit" v-model="editcontentMenu.detail" autocomplete="off" @key></el-input>
+      </el-form-item>
+      <!-- <el-form-item label="B选项" :label-width="formLabelWidth">
+        <el-input v-model="editForm.B" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="C选项" :label-width="formLabelWidth">
+        <el-input v-model="editForm.C" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="D选项" :label-width="formLabelWidth">
+        <el-input v-model="editForm.D" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="正确答案:" :label-width="formLabelWidth">
+        <el-input v-model="editForm.answer" autocomplete="off"></el-input>
+      </el-form-item> -->
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="saveEdit">确 定</el-button>
+    </span>
+  </el-dialog>
+  </div>
+</body>
+  <!-- import Vue before Element -->
+  <script src="../js/vue.js"></script>
+  <!-- import JavaScript -->
+  <script src="../js/elementui.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      methods: {
+        handleEdit(index, row,flag=0) {
+            if(flag == 1){
+                this.editForm = {}
+                this.dialogVisible = true
+                console.log("新增题目")
+                this.flag = 1
+                saveEdit()
+            }else{
+            this.currentIndex = index;
+            console.log(index, row);
+          
+            console.log(this.contentMenu[index])
+            this.dialogVisible = true
+            this.editcontentMenu = this.contentMenu[index]
+            //this.contentMenu[index] = this.editcontentMenu
+            }
+           
+        },
+        handleDelete(index, row) {
+          console.log(index, row);
+          this.question.splice(index, 1)
+          localStorage.setItem('question', JSON.stringify(this.question))
+        },
+        saveEdit() {
+            if(this.flag == 1){
+                this.contentMenu.unshift(this.editcontentMenu)
+                localStorage.setItem('menucontent',JSON.stringify(this.contentMenu))
+                console.log(this.contentMenu)
+                this.flag = -1
+                this.dialogVisible = false
+                this.editForm = {}
+            }else{
+                this.dialogVisible = false
+                if(this.currentIndex != -1){
+                    this.contentMenu[this.currentIndex] = this.editcontentMenu
+                    localStorage.setItem('menucontent',JSON.stringify(this.contentMenu))
+                    console.log(this.contentMenu)
+                }
+         
+            }
+          
+        },
+        handleCommand(command) {
+            console.log(command)
+        },
+        handleKey(e){
+            // if(e.keyCode == 13){
+            //     console.log(this.input)
+            //     let a = this.question.filter((item)=>{
+            //         return item.question.indexOf(this.input) != -1
+            //     })
+            //     this.question = a
+            // }
+            
+            // let a = [];
+            // a = JSON.parse(localStorage.getItem('question'));
+            // this.question = a
+            let foundIndex = this.question.findIndex(obj => obj.question === this.input);
+            let data = [];
+            data.push(this.question[foundIndex])
+            this.question = data
+            console.log(foundIndex);
+            console.log(this.input);
+        }
+      },
+      watch:{
+        input(val,oldVal){
+            if(val == ""){
+                let a = [];
+                a = JSON.parse(localStorage.getItem('question'));
+                this.question = a
+            }
+            let userInput = val.trim();
+            console.log(val);
+            console.log(userInput);
+            // 创建一个正则表达式模式
+            let pattern = new RegExp(userInput, "i"); // "i" 表示忽略大小写
+
+            // 使用filter方法结合正则表达式来找到匹配的对象
+            let matchedObjects = this.question.filter(obj => pattern.test(obj.question));
+            this.question = matchedObjects
+            
+            console.log(matchedObjects)
+        },
+        contentMenu(newval,oldVal){
+            console.log("数据改变")
+            console.log(newval)
+            localStorage.setItem('menucontent',JSON.stringify(newval))
+        }
+      }
+      ,
+      mounted() {
+        setTimeout(() => {
+            let a = [];
+            a = JSON.parse(localStorage.getItem('question'));
+            this.question = a
+            let test = localStorage.getItem('menucontent')
+            if(test == null){
+                console.log("不存在")
+                localStorage.setItem('menucontent',JSON.stringify(this.contentMenu))
+            }else{
+                this.contentMenu = JSON.parse(test)
+            }
+
+
+
+        }, 200);
+      }
+      ,
+      data() {
+      return {
+        tableData: [{
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-08',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-06',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-07',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }]
+       ,question:[],
+       input:"",
+       dialogVisible: false,
+       editForm:{
+         A:"",
+         B:"",
+         C:"",
+         D:"",
+        answer:"",
+        question:""
+       },
+       formLabelWidth:"100",
+       currentIndex:-1,
+       flag:-1,
+       contentMenu:[{"title":"四级单词","key":"a","detail":"四级单词四级单词"},{"title":"六级单词","key":"b","detail":"六级单词六级单词"},{"title":"考研单词","key":"c","detail":"考研单词考研单词"},{"title":"自定义","key":"d","detail":"自定义自定义"  }],
+       editcontentMenu:{"title":"","key":"","detail":""}
+
+        
+    }
+    }
+    })
+  </script>
+</html>

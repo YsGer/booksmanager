@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>注册与登录页面切换示例</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+  }
+  .form-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 350px;
+    margin: auto;
+    height: calc(100vh - 100px); /* 自适应屏幕高度减去100px */
+    
+  }
+  .form-group {
+    margin-bottom: 15px;
+  }
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  .form-group input {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  .form-button {
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .form-button:hover {
+    background-color: #4cae4c;
+  }
+  #register-form, #login-form {
+    display: none;
+  }
+  #register-form.show, #login-form.show {
+    display: block;
+  }
+  right_margin{
+    margin-right:20px;
+  }
+</style>
+</head>
+<body>
+<div class="form-container">
+
+  
+  <div id="register-form" class="">
+    <h2>注册</h2>
+    
+      <div class="form-group right_margin" >
+        <label for="registerUsername">用户名:</label>
+        <input type="text" id="registerUsername" name="registerUsername" required>
+      </div>
+      <div class="form-group right_margin">
+        <label for="registerPassword">密码:</label>
+        <input type="password" id="registerPassword" name="registerPassword" required>
+      </div>
+      <div class="form-group " style="display: flex;">
+        <button style="flex: 4;" type="submit" class="form-button">注册</button>
+        
+      </div>
+    
+  </div>
+  
+  <div id="login-form" class="show" >
+    <h2>登录</h2>
+    
+      <div class="form-group right_margin">
+        <label for="loginUsername">用户名:</label>
+        <input class="right_margin" type="text" id="loginUsername" name="loginUsername" required>
+      </div>
+      <div class="form-group right_margin">
+        <label for="loginPassword">密码:</label>
+        <input type="password" id="loginPassword" name="loginPassword" required>
+      </div>
+      <div class="form-group " style="display: flex;">
+        <button style="flex: 4;" type="submit" class="form-button">登录</button>
+        
+      </div>
+    
+  </div>
+  <button style="flex: 4;" id="register_Toggle" class="form-button">去注册</button>
+  
+</div>
+
+<script>
+    let flag = 1;
+
+    var registerToggle = document.getElementById('register_Toggle');
+    registerToggle.addEventListener('click', function(){
+        if(flag == 1){
+            register_show()
+            flag = 0
+            registerToggle.innerText = "去登录"
+        }else{
+            loggin_show()
+            flag = 1
+            registerToggle.innerText = "去注册"
+        }
+        
+    });
+    function register_show(){
+        var registerForm = document.getElementById('register-form');
+    var loginForm = document.getElementById('login-form');
+    registerForm.classList.add('show');
+    loginForm.classList.remove('show');
+    }
+
+    function loggin_show(){
+        var registerForm = document.getElementById('register-form');
+        var loginForm = document.getElementById('login-form');
+        registerForm.classList.remove('show');
+        loginForm.classList.add('show');
+    }
+</script>
+</body>
+</html>

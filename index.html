@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>开心刷题 - 免费在线刷题练习</title>
+    <!-- 添加样式表链接 -->
+    
+
+    <style>
+        /* 通用样式 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* 头部区域 */
+.header {
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+}
+
+.logo {
+    font-size: 24px;
+    margin-left: 20px;
+}
+
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.navbar ul li {
+    float: left;
+    margin-right: 20px;
+}
+
+.navbar ul li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.navbar ul li a:hover {
+    background-color: #555;
+}
+
+.search-box {
+    float: right;
+    margin-top: 10px;
+}
+
+.search-box input {
+    width: 150px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.search-box button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #5cb85c;
+    color: white;
+    cursor: pointer;
+}
+
+/* 主体内容区域 */
+.main-content {
+    display: flex;
+    margin-top: 20px;
+}
+
+.banner {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex: 1;
+}
+
+.banner h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.banner p {
+    margin-bottom: 20px;
+}
+
+.banner button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #5cb85c;
+    color: white;
+    cursor: pointer;
+}
+
+.sidebar {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex: 1;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.function-area {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex: 1;
+}
+
+.function-area ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.function-area ul li {
+    margin-bottom: 10px;
+}
+
+/* 底部区域 */
+.footer {
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.features i {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.contact p {
+    margin-bottom: 5px;
+}
+</style>
+        <link rel="stylesheet" href="./layui/css/layui.css">
+        <link rel="stylesheet" href="./css/elemetui.css">
+        <script src="./layui/layui.js"> </script>
+        <script src="./js/vue.js"></script>
+        <script src="./js/elementui.js"></script>
+        <script src="./js/browser.js"></script>
+</head>
+<body>
+    <div id="app">
+
+    <!-- 头部区域 -->
+        <header class="header">
+            <div class="logo">开心刷题</div>
+            <div class="search-box">
+                <input type="text" placeholder="请输入题库名称">
+                <button type="submit">搜索</button>
+                <button v-if="flag==0" class="layui-bg-green" @click="login_visible=true">登录</button>
+                <button v-if="flag==0" class="layui-bg-blue"  @click="reg_visible=true">注册</button>
+                <span v-else style="margin-right:20px ;">用户名:{{currentLogin.username}}</span>
+                <button v-if="flag==1" class="layui-bg-blue"  @click="logout">退出登录</button>
+            </div>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="#">首页</a></li>
+                    <li><a href="./recite_word.html">专业题库</a></li>
+                    <li><a href="#">上传题库</a></li>
+                    <li><a href="#">在线考试</a></li>
+                    <li><a href="#">文档下载</a></li>
+                    <li><a href="#">搜题</a></li>
+                    <li><a href="#">APP</a></li>
+                    <li><a href="#">报名</a></li>
+                    <li><a href="#">企业版</a></li>
+                </ul>
+            </nav> 
+            <!-- 搜索框和登录/注册按钮 -->
+        
+        </header>
+        <div class="layui-carousel" id="ID-carousel-demo-image">
+            <div carousel-item>
+            <div><img src="./img/banner1_3.webp"></div>
+            <div><img src="./img/banner2@2x.webp"></div>
+            <div><img src="./img/banner3@2x.webp"></div>
+            <div><img src="./img/banner4@2x.webp"></div>
+            <div><img src="./img/banner5@2x.webp"></div>
+            </div>
+        </div>
+        <!-- 主体内容区域 -->
+        <section class="main-content">
+            <div class="banner">
+                <h1>免费在线刷题练习</h1>
+                <p>提供多种练习模式，实时判断对错，提供精准的答案和解析。</p>
+                <button class="download">立即下载</button>
+            </div>
+            <!-- 左侧菜单栏 -->
+            <aside class="sidebar">
+                <ul>
+                    <li>建筑工程</li>
+                    <li>财经金融</li>
+                    <li>职业资格</li>
+                    <li>技能鉴定</li>
+                    <li>医疗卫生</li>
+                </ul>
+            </aside>
+            <!-- 右侧功能区 -->
+            <div class="function-area">
+                <ul>
+                    <li>我的错题</li>
+                    <li>我的收藏题</li>
+                    <li>模拟考试</li>
+                    <li>章节练习</li>
+                    <li>随机练习</li>
+                    <li>顺序练习</li>
+                    <li>题型练习</li>
+                    <li>高频错题</li>
+                </ul>
+            </div>
+        </section>
+        <!-- 底部区域 -->
+        <footer class="footer">
+            <div class="features">
+                <i class="icon-upload"></i>
+                <span>上传题库</span>
+                <i class="icon-exam"></i>
+                <span>发起考试</span>
+                <i class="icon-lightbulb"></i>
+                <span>智能解析</span>
+                <i class="icon-folder"></i>
+                <span>搜索试题</span>
+                <i class="icon-download"></i>
+                <span>文档下载</span>
+            </div>
+            <div class="contact">
+                <p>电话咨询</p>
+                <p>400-886-2980</p>
+            </div>
+        </footer>
+        <!-- 加载更多按钮 -->
+
+        <el-dialog title="注册" :visible.sync="reg_visible" :before-close="handleClose">
+            <el-form :model="registerForm" :rules="rules" ref="registerForm">
+              <el-form-item label="用户名" prop="username">
+                <el-input v-model="registerForm.username"></el-input>
+              </el-form-item>
+              <el-form-item label="密码" prop="password">
+                <el-input type="password" v-model="registerForm.password"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="submitForm('registerForm')">注册</el-button>
+                <el-button @click="resetForm('registerForm')">重置</el-button>
+              </el-form-item>
+            </el-form>
+          </el-dialog>
+          <el-dialog title="登录" :visible.sync="login_visible" :before-close="handleClose">
+            <el-form :model="loginForm" :rules="rules" ref="loginForm">
+              <el-form-item label="用户名" prop="username">
+                <el-input v-model="loginForm.username"></el-input>
+              </el-form-item>
+              <el-form-item label="密码" prop="password">
+                <el-input type="password" v-model="loginForm.password"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
+                <el-button @click="resetForm('loginForm')">重置</el-button>
+              </el-form-item>
+            </el-form>
+          </el-dialog>
+    </div>
+    
+
+    <script>
+
+
+
+
+
+        //添加一个屏幕宽度变化的监听器
+        window.addEventListener('resize', function () {
+            //获取屏幕宽度
+            var width = window.innerWidth;
+            //获取元素
+            var element = document.getElementById('ID-carousel-demo-image');
+            //设置元素的宽度
+            element.style.width = width-20 + 'px';
+            //设置元素的高度
+            element.style.height = width / 2- 20 + 'px';
+        });
+        layui.use(function(){
+          var carousel = layui.carousel;
+          // 渲染 - 图片轮播
+          carousel.render({
+            elem: '#ID-carousel-demo-image',
+            width: '100%',
+            height: '410px',
+            interval: 3000
+          });
+        });
+        </script>
+        <script>
+            //挂载vue
+            new Vue({
+                el: '#app',
+                data: {
+                    reg_visible: false,
+                    login_visible: false,
+                    registerForm: {
+                        username: '',
+                        password: ''
+                    },
+                    user:[]
+                    ,
+                    loginForm:{
+                         username: '',
+                        password: ''
+                    },
+                    flag:0,
+                    currentLogin:{},
+
+                    
+                    rules: {
+                        username: [
+                            { required: true, message: '请输入用户名', trigger: 'blur' },
+                            { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+                        ],
+                        password: [
+                            { required: true, message: '请输入密码', trigger: 'blur' },
+                            { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
+                        ]
+                    }
+                },
+                methods: {
+                    handleClose(done) {
+                        this.$confirm('确认关闭？')
+                            .then(_ => {
+                                done();
+                            })
+                            .catch(_ => {});
+                    },
+                    submitForm(formName) {
+                        if(formName == 'loginForm'){
+                            console.log('login');
+                            for(let i = 0; i < this.user.length; i++){
+                                if(this.user[i].username == this.loginForm.username && this.user[i].password == this.loginForm.password){
+                                    this.$message({
+                                        type: 'success',
+                                        message: '登录成功!'
+                                    });
+                                    this.login_visible = false;
+                                    this.currentLogin = this.user[i];
+                                    localStorage.setItem('currentLogin', JSON.stringify(this.currentLogin));
+                                    this.flag =1
+                                   
+                                }
+                            }
+                            this.$message({
+                                type: 'error',
+                                message: '用户名或密码错误!'
+                            });
+                            
+                        }else{
+
+                            this.$refs[formName].validate((valid) => {
+                                if (valid) {
+                                    this.$message({
+                                        type: 'success',
+                                        message: '注册成功!'
+                                    });
+                                    this.reg_visible = false;
+                                    this.user.push(this.registerForm);
+                                } else {
+                                    console.log('error submit!!');
+                                    return false;
+                                }
+                            });
+                        }
+                    },
+                    resetForm(formName) {
+                        this.$refs[formName].resetFields();
+                    },
+                    logout(){
+                        this.flag = 0;
+                        this.currentLogin = {};
+                        localStorage.setItem('currentLogin', JSON.stringify(this.currentLogin));
+                    }
+                },
+                mounted() {
+                    console.log('app mounted');
+                    //获取localStorage中的数据user
+                    tmp = JSON.parse(localStorage.getItem('userAccounts'));
+                    currentLogin = JSON.parse(localStorage.getItem('currentLogin'));
+                    console.log(currentLogin);
+                    if(currentLogin == null || currentLogin == undefined || JSON.stringify(currentLogin) =='{}'){
+                        this.currentLogin = {};
+                    }else{
+                        console.log("执行到这里啦")
+                        this.currentLogin = currentLogin;
+                        this.flag = 1;
+                    }
+
+
+                    if(tmp == null){
+                        this.user = [{"username":"test","password":"123456","cname":"马云","authority":"管理员"},{"username":"test1","password":"123456","cname":"马化腾","authority":"管理员"},{"username":"test2","password":"123456","cname":"马冬梅","authority":"普通用户"}];
+
+                    }else {
+                        this.user = tmp;
+
+                    }
+                },
+                watch: {
+                    user(newVal, oldVal) {
+                        console.log('user changed');
+                        //将数据存储到localStorage中
+                        localStorage.setItem('userAccounts', JSON.stringify(newVal));
+                    }
+                }
+            });
+        </script>
+        <script>
+            //设置分类字典 用本地存储
+            let userDataCategory = {};
+            
+            //获取到本地存储的userDataCategory 判断是否存在
+            if(localStorage.getItem('userDataCategory') != null || localStorage.getItem('userDataCategory') != undefined || localStorage.getItem('userDataCategory') != ''){
+                        let menucontent = JSON.parse(localStorage.getItem('menucontent'));
+                    //获取到本地存储的question
+                    let question = JSON.parse(localStorage.getItem('question'));
+                    //遍历上面的menucontent ,并取出其中的title
+                    
+                    for(let i = 0; i < menucontent.length; i++){
+                        let t = Pinyin.convertToPinyin(menucontent[i].title);
+                        console.log(t);
+                        userDataCategory[t.toLowerCase()] = question
+                    }
+                    
+
+                    //将userDataCategory存储到本地存储中
+                    localStorage.setItem('userDataCategory', JSON.stringify(userDataCategory));
+                    console.log("执行到最后")
+
+
+                        
+            }else{
+                userDataCategory = JSON.stringify(localStorage.getItem('userDataCategory'));
+                console.log("执行到这里")
+
+            }
+            let menucontent = JSON.parse(localStorage.getItem('menucontent'));
+            //获取到本地存储的question
+            let question = JSON.parse(localStorage.getItem('question'));
+            //遍历上面的menucontent ,并取出其中的title
+            
+            for(let i = 0; i < menucontent.length; i++){
+                let t = Pinyin.convertToPinyin(menucontent[i].title);
+                console.log(t);
+                userDataCategory[t.toLowerCase()] = question
+            }
+            
+
+            //将userDataCategory存储到本地存储中
+
+
+
+        </script>
+</body>
+</html>

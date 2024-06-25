@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 引入 layui.css -->
+    <link href="./layui/css/layui.css" rel="stylesheet">
+    <!-- 引入 layui.js -->
+    <script src="./layui/layui.js"></script>
+    <link rel="stylesheet" href="./css/index.css">
+    <script src="./js/vue.js"></script>
+    <script src="./js/axios.min.js"></script>
+    <style>
+        .mytest{
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+
+    
+    <div id="app">
+
+        <input type="text" name="searchInput" placeholder="test1"/>
+
+        
+        <div style="background-color: white; height: 50px; padding-top: 10px; margin-left: 20px; margin-right: 20px;">
+            <div id="changetitle" style="display: float;">
+                <div style="float: left; ">
+                    <p>{{message}}</p>
+                </div>
+                <div style="float: right;">
+                    <p>{{messgea_right}} </p>
+                </div>
+            </div>
+        </div>
+        <ul class="layui-nav layui-bg-green ">
+            <li class="layui-nav-item mytest" v-for="todo in todos">{{todo}}</li>
+        </ul>
+        <ul>
+            <li v-for="(k,v) in title_cycle"><a :href=k>{{v}}</a></li>
+        </ul>
+
+        
+        <div style="display: flex; justify-content: space-between;">
+            <div style="width: 50%; height: 550px; background-color: red;">
+                <h1 style="text-align: center;">技巧相关</h1>
+                <ul>
+                    <li style="display: block;" v-for="t in content_test"><a href="">{{}}</a></li>
+
+                </ul>
+            
+            </div>
+            <div style="width: 50%; height: 550px; background-color: green;">
+                <h1 style="text-align: center;">网络相关</h1>
+                <li style="display: block;" v-for="t in content_test"><a href="">{{t}}</a></li>
+            </div>
+            
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <div style="width: 50%; height: 550px; background-color: floralwhite;">
+                <h1 style="text-align: center;">编程开发</h1>
+                <li style="display: block;" v-for="t in content_test"><a href="">{{t}}</a></li>
+            </div>
+            <div style="width: 50%; height: 550px; background-color: skyblue;">
+            
+                <h1 style="text-align: center;">破解软件</h1>
+                <li style="display: block;" v-for="t in content_test"><a href="">{{t}}</a></li>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <div class="layui-carousel" id="ID-carousel-demo-1">
+        <div carousel-item>
+          <div>条目1</div>
+          <div>条目2</div>
+          <div>条目3</div>
+          <div>条目4</div>
+          <div>条目5</div>
+        </div>
+      </div> 
+
+      
+
+    
+    <div class="content" style="margin: 0 auto; height: calc(100vh); width: 80%; background-color: #f1f1f1; margin-top: 20px;">
+        <div>
+            <ul>
+                <li id="gaoji_click">高级</li>
+                <li id="zhongji_click">中级</li>
+                <li id="chuji_click">初级</li>
+            </ul>
+            <div>
+                <div id="gaoji" class="fenlei" style="display: none;">
+                   
+                    <button type="button" class="layui-btn layui-btn-normal">信息系统项目管理师</button>
+                    <button type="button" class="layui-btn layui-btn-normal">系统规划与管理</button>
+                    <button type="button" class="layui-btn layui-btn-normal">网络规划设计师</button>
+                    <button type="button" class="layui-btn layui-btn-normal">系统分析师</button>
+                    <button type="button" class="layui-btn layui-btn-normal">系统架构师</button>
+                </div>
+                <div id="zhongji" class="fenlei" style="display: none;">
+                                        
+                    <button type="button" class="layui-btn layui-btn-normal">网络工程师</button>
+                    <button type="button" class="layui-btn layui-btn-normal">电子商务师</button>
+                    <button type="button" class="layui-btn layui-btn-normal">软件设计师</button>
+                    <button type="button" class="layui-btn layui-btn-normal">系统分析师</button>
+                    <button type="button" class="layui-btn layui-btn-normal">系统架构师</button>
+                </div>
+                <div id="chuji" class="fenlei" style="display: none;">
+                 
+                                                            
+                    <button type="button" class="layui-btn layui-btn-normal">网络工程师</button>
+                    <button type="button" class="layui-btn layui-btn-normal">电子商务师</button>
+                    <button type="button" class="layui-btn layui-btn-normal">软件设计师</button>
+                    <button type="button" class="layui-btn layui-btn-normal">系统分析师</button>
+                    <button type="button" class="layui-btn layui-btn-normal">系统架构师</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script>
+        console.log(window.location.href);
+        let t =window.location.href.split('/')
+        //去除后面的资源路径http://127.0.0.1:5500/index.html
+        var url =t.pop();
+        let url1 = t.pop();
+        let realUrl= "http://"+url1+"/mobile.html";
+        console.log(url)
+        console.log(url1)
+
+        //判断是否属于移动设备
+        if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+            //移动设备
+            console.log("移动设备");
+            //从当前路径相对跳转到mobile.html
+            
+            window.location.href = realUrl;
+           
+
+            
+        } else {
+            //PC设备
+            console.log("PC设备");
+        }
+
+
+
+        new Vue({
+            el: '.content',
+            data: {
+                level: '高级'
+            },
+            methods: {
+                changeLevel: function (level) {
+                    this.level = level;
+                }
+            }
+        })
+
+        //获取类名为li_click元素
+        //获取chuji_click元素
+        var chuji_click = document.getElementById('chuji_click');
+
+        // chuju_click.onclick = function () {
+        //     console.log("被点击");
+        //     //获取类名为fenlei元素
+        //     var fenlei = document.getElementsByClassName('fenlei');
+        //     //遍历fenlei元素
+        //     for (var i = 0; i < fenlei.length; i++) {
+        //         //设置fenlei元素的display属性为none
+        //         fenlei[i].style.display = 'none';
+        //     }
+        //     //获取id为chuji元素
+        //     var chuji = document.getElementById('chuji');
+        //     //设置chuji元素的display属性为block
+        //     chuji.style.display = 'block';
+        // }
+
+
+
+    </script>
+    <script>
+        layui.use(function(){
+  var carousel = layui.carousel;
+  // 渲染 - 常规轮播
+  carousel.render({
+    elem: '#ID-carousel-demo-1',
+    width: 'auto'
+  })});
+
+
+        layui.use(function(){
+          var carousel = layui.carousel;
+          // 渲染 - 图片轮播
+          carousel.render({
+            elem: '#ID-carousel-demo-image',
+            width: '100%',
+            height: '360px',
+            interval: 3000
+          });
+        });
+        console.log("vue之前加载");
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue!',
+                todos: ['首页导航','网站首页','新闻分类'],
+                title_cycle:{'链接1':'http://www.baidu.com','链接2':'http://wwww.baidu.com',"链接3":'http://www.baidu.com'},
+                content_test:[],
+                messgea_right:"可变消息二",
+                
+            },
+            methods: {
+                reverseMessage: function () {
+                    this.message = this.message.split('').reverse().join('')
+                },
+                
+            },
+            mounted() {
+                //获取首页导航栏文字菜单
+                axios.get('http://localhost:5220/api/user/content_test')
+                .then((response)=>{
+                    console.log(response.data);
+                    this.todos = response.data;
+                    console.log(this.todos);
+                    this.todos.forEach(element => {
+                        console.log(element)
+                    });
+                })
+
+                setTimeout(() => {
+                    axios.post('http://localhost:5220/api/user/content_detail',data={'content':'技巧相关'})
+                .then((response)=>{
+                    console.log(response.data );
+                    console.log("test content");
+                    this.content_test = response.data;
+                
+                }).catch((error)=>{
+                    console.log(error);
+                })
+                }, 200);
+               
+
+                
+
+            }
+            //挂载后
+            
+        })
+
+        var url = new URL('http://www.example.com/?name=JohnDoe&id=123');
+        let params = new URLSearchParams(url.search);
+        console.log(params.get('name'));
+        console.log(params.get('id'));
+
+        console.log(window.location.href);
+         
+        </script>
+</body>
+</html>

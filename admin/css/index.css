@@ -1,0 +1,19 @@
+.content_menu{
+    float: left;
+
+    width: 100px;
+    background-color: white;
+}
+
+
+.content_container{
+    float: right;
+    width: 66%;
+    background-color:aquamarine;
+}
+
+body{
+
+    height: calc(100vh);
+
+}

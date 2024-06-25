@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开心刷软考真题and记单词</title>
+    <link rel="stylesheet" href="./css/elemetui.css">
+
+    <link rel="stylesheet" href="./layui/css/layui.css">
+    <script src="./layui/layui.js"></script>
+    <style>
+        .time {
+                font-size: 13px;
+                color: #999;
+                }
+                
+                .bottom {
+                    margin-top: 13px;
+                    line-height: 12px;
+                }
+
+                .button {
+                    padding: 0;
+                    float: right;
+                }
+
+                .image {
+                    width: 100%;
+                    display: block;
+                }
+
+                .clearfix:before,
+                .clearfix:after {
+                    display: table;
+                    content: "";
+                }
+                
+                .clearfix:after {
+                    clear: both
+                }
+                .flex-item {
+                    flex: 1; /* 每个项目占据相同的空间 */
+                    text-align: center;
+                }
+                .layui-carousel {
+                width: 100%;
+                margin: 0 auto; /* 水平居中 */
+                }
+                
+                /* 轮播图项的样式 */
+                .layui-carousel img {
+                width: 100%;
+                height: auto; /* 保持图片的宽高比 */
+                display: block; /* 移除图片下方的空白间隙 */
+                }
+                    </style>
+</head>
+<body>
+    
+    <div id="app">
+        <div style="display: flex; justify-content: center;">
+            <h1 style="flex: 7;" style="justify-content: center;" class="flex-item">轻松刷题</h1>
+            <div style="flex: 3;">
+                <el-button v-if="flag==0" type="primary" @click="handlestartstudy">登录</el-button>
+                <span v-else>当前登录用户：{{currentLogin.username}}</span>
+            </div>
+                <el-button v-if="flag==0" type="primary" @click="handlestartstudy" style="margin: 0;">注册</el-button>
+                <el-button v-else type="primary" @click="flag=0">退出登录</el-button>
+                
+            
+        </div>
+       
+        <el-row >
+            <el-col style="margin-top: 10px; padding: 5px;" :xs="12" :sm="6" :md="6" :lg="6" :xl="6" v-for="t in contentMenu" :key="t.key" :offset="0 > 0 ? 2 : 0">
+              <el-card :body-style="{ padding: '0px' }"  >
+                <h1 style="text-align: center;">{{t.title}}</h1>
+                <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
+                <div style="padding: 14px;margin: 10 auto;">
+                    
+                  
+                    <el-row justify="center" align="middle">
+                        <!-- <el-col :span="24">
+                            <el-button type="primary" @click="handleEdit(t.key)">编辑</el-button>
+                        </el-col> -->
+                        <el-col :span="24">
+                            <div style="text-align: center; margin: 0 auto;">
+                                <!-- <el-button type="primary" @click="handlestartstudy(t.key)">开始学习</el-button> -->
+                                <el-button @click="answerChange" type="primary" >开始学习</el-button>
+                            </div>
+
+                            
+                        </el-col>
+                    </el-row>
+
+                </div>
+              </el-card>
+            </el-col>
+          </el-row>
+          
+    </div>
+
+      <script>
+        let test = [{"question": "abandon", "A": "vt.\u4e22\u5f03\uff1b\u653e\u5f03\uff0c\u629b\u5f03\n", "B": "vt.\u8bc1\u5b9e\uff0c\u80af\u5b9a\uff1b\u6279\u51c6\n", "C": "prep.\u5728\u2026\u7684\u90a3\u8fb9\n", "D": "vt.\u8fbe\u5230(\u76ee\u7684)\uff1b\u5b8c\u6210\n", "answer": "A"}, {"question": "ability", "answer": "D", "D": "n.\u80fd\u529b\uff1b\u80fd\u8010\uff0c\u672c\u9886\n", "A": "vt.\u80cc\u53db\uff1b\u8f9c\u8d1f\uff1b\u6cc4\u6f0f\n", "B": "n.\u6c7d\u8f66\uff0c\u673a\u52a8\u8f66\n", "C": "n.\u508d\u665a\uff0c\u9ec4\u660f\uff0c\u665a\u4e0a\n"}, {"question": "able", "answer": "A", "A": "a.\u6709\u80fd\u529b\u7684\uff1b\u51fa\u8272\u7684\n", "B": "n.\u5956\uff0c\u5956\u54c1\uff1b\u5224\u5b9a\n", "C": "n.\u9ec4\u94dc\uff1b\u9ec4\u94dc\u5668\n", "D": "n.\u5bf9\u6bd4\uff0c\u5bf9\u7167\uff0c\u60ac\u6b8a\n"}, {"question": "abnormal", "answer": "B", "B": "a.\u4e0d\u6b63\u5e38\u7684\uff1b\u53d8\u6001\u7684\n", "A": "n.\u80f8\u8154\uff0c\u80f8\u819b\uff1b\u7bb1\u5b50\n", "C": "ad.\u660e\u767d\u5730\uff0c\u6e05\u6670\u5730\n", "D": "n.\u503a\uff0c\u503a\u52a1\uff0c\u6b20\u503a\n"}, {"question": "aboard", "answer": "A", "A": "ad.\u5728\u8239(\u8f66)\u4e0a\uff1b\u4e0a\u8239\n", "B": "vt.\u5efa\u9020\uff1b\u5efa\u8bbe\uff1b\u6784\u7b51\n", "C": "vt.\u4f7f\u6cae\u4e27\uff1b\u6309\u4e0b\n", "D": "a.\u4e0d\u4e00\u6837\u7684\uff0c\u76f8\u5f02\u7684\n"}, {"question": "about", "answer": "D", "D": "prep.\u5173\u4e8e\uff1b\u5728\u2026\u5468\u56f4\n", "A": "vi.\u901a\u8baf\uff1b\u4f20\u8fbe\uff1b\u4f20\u64ad\n", "B": "n.\u4f1a\u8bae\uff0c\u8ba8\u8bba\u4f1a\n", "C": "n.\u5e26\uff0c\u8170\u5e26\uff1b\u76ae\u5e26\uff1b\u533a\n"}, {"question": "above", "answer": "D", "D": "prep.\u5728\u2026\u4e0a\u9762\uff1b\u9ad8\u4e8e\n", "A": "a.\u56f0\u96be\uff1b\u96be\u4e8b\uff1b\u56f0\u5883\n", "B": "vt.\u9a7e\u9a76\uff1b\u6253\u5165\uff1b\u9a71\n", "C": "n.\u97f3\u4e50\u4f1a\uff0c\u6f14\u594f\u4f1a\n"}, {"question": "abroad", "answer": "D", "D": "ad.(\u5728)\u56fd\u5916\uff1b\u5230\u5904\n", "A": "n.\u6559\u80b2\uff1b\u8bad\u5bfc\uff1b\u6559\u80b2\u5b66\n", "B": "n.\u8863\u670d\uff0c\u670d\u88c5\uff1b\u88ab\u8925\n", "C": "a.\u6d3b\u7740\u7684\uff1b\u6d3b\u8dc3\u7684\n"}, {"question": "absence", "answer": "A", "A": "n.\u7f3a\u5e2d\uff0c\u4e0d\u5728\u573a\uff1b\u7f3a\u4e4f\n", "B": "vt.\u529d\u544a\uff1b\u5efa\u8bae\uff1b\u901a\u77e5\n", "C": "n.\u5165\u53e3\uff0c\u95e8\u53e3\uff1b\u8fdb\u5165\n", "D": "n.\u8bcd\u5178\uff0c\u5b57\u5178\n"}, {"question": "absent", "answer": "C", "C": "a.\u4e0d\u5728\u573a\u7684\uff1b\u7f3a\u4e4f\u7684\n", "A": "n.\u7acb\u65b9\u5f62\uff1b\u7acb\u65b9\n", "B": "vi.\u9053\u6b49\uff0c\u8c22\u7f6a\uff0c\u8ba4\u9519\n", "D": "a.\u5927\u7684\uff0c\u5de8\u5927\u7684\n"}, {"question": "absolute", "answer": "D", "D": "a.\u7edd\u5bf9\u7684\uff1b\u7eaf\u7cb9\u7684\n", "A": "int.\u518d\u4f1an.\u544a\u522b\n", "B": "vi.\u6bd4\u8d5b\uff1b\u7ade\u4e89\uff1b\u5bf9\u6297\n", "C": "aux."}, {"question": "absolutely", "answer": "C", "C": "ad.\u5b8c\u5168\u5730\uff1b\u7edd\u5bf9\u5730\n", "A": "n.\u7816\uff0c\u7816\u5757\uff1b\u7816\u72b6\u7269\n", "B": "vt.\u5efa\u9020\uff1b\u4f7f\u7ad6\u7acb\n", "D": "n.\u8bf7\u6c42\uff0c\u7533\u8bf7\uff1b\u65bd\u7528\n"}, {"question": "absorb", "answer": "B", "B": "vt.\u5438\u6536\uff1b\u4f7f\u4e13\u5fc3\n", "A": "prep.\u5728\u2026\u4ee5\u540e\uff1b\u6b21\u4e8e\n", "C": "vt.\u76f8\u671b\uff1b\u8981\u6c42n.\u613f\u671b\n", "D": "a.\u8054\u90a6\u7684\uff1b\u8054\u76df\u7684\n"}, {"question": "abstract", "answer": "A", "A": "a.\u62bd\u8c61\u7684n.\u6458\u8981\n", "B": "vt.\u8bf4\u660e\uff1b\u8bba\u8bc1\uff1b\u8868\u9732\n", "C": "n.\u5efa\u7acb\uff0c\u8bbe\u7acb\uff0c\u786e\u7acb\n", "D": "n.\u5bbd\u5ea6\uff0c\u5e45\u5ea6\uff1b\u5e45\u9762\n"}, {"question": "abundant", "answer": "B", "B": "a.\u4e30\u5bcc\u7684\uff1b\u5927\u91cf\u7684\n", "A": "vt.\u8d23\u5907\uff0c\u628a\u2026\u5f52\u548e\u4e8e\n", "C": "n.\u52a8\u7269\uff0c\u517da.\u52a8\u7269\u7684\n", "D": "vt.\u8981\u6c42\uff1b\u9700\u8981\uff1b\u8be2\u95ee\n"}, {"question": "abuse", "answer": "D", "D": "vt.\u6ee5\u7528\uff1b\u8650\u5f85n.\u6ee5\u7528\n", "A": "ad.\u65e0\u8bba\u5982\u4f55\n", "B": "n.\u4e60\u4fd7\uff0c\u60ef\u4f8b\uff1b\u516c\u7ea6\n", "C": "a.\u8d64\u88f8\u7684\uff1b\u4ec5\u4ec5\u7684\n"}, {"question": "academic", "answer": "A", "A": "a.\u5b66\u9662\u7684\uff1b\u5b66\u672f\u7684\n", "B": "n.\u4f8b\u5b50\uff0c\u5b9e\u4f8b\uff1b\u6a21\u8303\n", "C": "vt.\u51b3\u5b9a\uff1b\u67e5\u660e\uff1b\u51b3\u5fc3\n", "D": "conj.\u4f46\u662f\uff0c\u53ef\u662f\n"}, {"question": "academy", "answer": "C", "C": "n.\u79c1\u7acb\u4e2d\u5b66\uff1b\u4e13\u79d1\u9662\u6821\n", "A": "n.\u7406\u4e8b\u4f1a\uff0c\u59d4\u5458\u4f1a\n", "B": "n.\u5dee\u522b\uff1b\u5dee\uff1b\u5206\u6b67\n", "D": "a.\u60ef\u5e38\u7684\uff1b\u4e60\u60ef\u7684\n"}, {"question": "accelerate", "answer": "A", "A": "vt.(\u4f7f)\u52a0\u5feb\uff1b\u4fc3\u8fdb\n", "B": "a.\u590d\u6742\u7684\uff1b\u7cbe\u5fc3\u5236\u4f5c\u7684\n", "C": "n.\u4e89\u8bba\uff0c\u8fa9\u8bba\uff1b\u7406\u7531\n", "D": "n.\u7528\u5177\uff0c\u5668\u5177\uff0c\u5668\u68b0\n"}, {"question": "acceleration", "answer": "C", "C": "n.\u52a0\u901f\uff1b\u52a0\u901f\u5ea6\n", "A": "n.\u60c5\u51b5\uff0c\u6761\u4ef6\uff1b\u5883\u9047\n", "B": "n.\u6b27\u6d32\n", "D": "n.\u4e91\uff1b\u4e91\u72b6\u7269\uff1b\u9634\u5f71\n"}, {"question": "accent", "answer": "A", "A": "n.\u53e3\u97f3\uff0c\u8154\u8c03\uff1b\u91cd\u97f3\n", "B": "n.\u60c5\u611f\uff0c\u611f\u60c5\uff1b\u6fc0\u52a8\n", "C": "n.\u51b3\u5fc3\uff1b\u51b3\u5b9a\uff1b\u786e\u5b9a\n", "D": "n.\u610f\u8bc6\uff0c\u89c9\u609f\uff1b\u77e5\u89c9\n"}, {"question": "accept", "answer": "D", "D": "vt.", "A": "a.\u6613\u5f2f\u66f2\u7684\uff1b\u7075\u6d3b\u7684\n", "B": "vi.\u722c\uff0c\u722c\u884c\n", "C": "vi.\u805a\u7126\uff0c\u6ce8\u89c6n.\u7126\u70b9\n"}, {"question": "acceptable", "answer": "D", "D": "a.\u53ef\u63a5\u53d7\u7684\uff0c\u5408\u610f\u7684\n", "A": "n.\u533a\uff1b\u5730\u533a\uff0c\u533a\u57df\n", "B": "C.", "C": "n.\u8857\u533avt.\u5835\u585e\uff0c\u62e6\u963b\n"}, {"question": "acceptance", "answer": "C", "C": "n.\u63a5\u53d7\uff0c\u9a8c\u6536\uff1b\u627f\u8ba4\n", "A": "n.\u8239\u575e\uff1b\u7801\u5934\uff1b\u8239\u5382\n", "B": "n.\u508d\u665a\uff0c\u9ec4\u660f\uff0c\u665a\u4e0a\n", "D": "a.\u4e30\u5bcc\u7684\uff1b\u5927\u91cf\u7684\n"}, {"question": "access", "answer": "C", "C": "n.\u63a5\u8fd1\uff1b\u901a\u9053\uff0c\u5165\u53e3\n", "A": "prep.\u5728\u2026\u7684\u90a3\u8fb9\n", "B": "a.\u7535\u7684\uff0c\u7535\u6c14\u79d1\u5b66\u7684\n", "D": "a.\u516c\u6c11\u7684\uff1b\u6587\u804c\u7684\n"}, {"question": "accessory", "answer": "A", "A": "n.\u540c\u8c0b\uff0c\u4ece\u72af\uff1b\u9644\u4ef6\n", "B": "vt.\u6b23\u8d4f\uff1b\u9886\u4f1a\uff1b\u611f\u8c22\n", "C": "ad.\u4e00\u5b9a\u5730\uff0c\u660e\u786e\u5730\n", "D": "vi.\u901a\u8baf\uff1b\u4f20\u8fbe\uff1b\u4f20\u64ad\n"}, {"question": "accident", "answer": "C", "C": "n.\u610f\u5916\u7684\uff1b\u4e8b\u6545\n", "A": "n.\u65e9\u996d\uff0c\u65e9\u9910\n", "B": "a.\u5927\u897f\u6d0b\u7684n.\u5927\u897f\u6d0b\n", "D": "a.\u9884\u671f\u7684\uff1b\u5e94\u7ed9\u7684\n"}, {"question": "accidental", "answer": "D", "D": "a.\u5076\u7136\u7684\uff1b\u975e\u672c\u8d28\u7684\n", "A": "a.\u7f8e\u7684\uff0c\u7f8e\u4e3d\u7684\n", "B": "a.\u5927\u80c6\u7684\uff0c\u52c7\u6562\u7684\n", "C": "n.\u6cd5\u9662\uff0c\u6cd5\u5ead\uff1b\u5ead\u9662\n"}, {"question": "accommodate", "answer": "B", "B": "vt.\u5bb9\u7eb3\uff1b\u4f9b\u5e94\uff0c\u4f9b\u7ed9\n", "A": "n.\u9ec4\u74dc\n", "C": "vt.\u533a\u522b\uff0c\u8fa8\u522b\uff0c\u8ba4\u522b\n", "D": "n.\u7236\u4eb2\uff1b\u795e\u7236\uff1b\u521b\u59cb\u4eba\n"}, {"question": "accommodation", "answer": "B", "B": "n.\u62db\u5f85\u8bbe\u5907\uff1b\u9884\u5b9a\u94fa\u4f4d\n", "A": "n.\u6905\u5b50\uff1b\u4e3b\u5e2d\n", "C": "a.\u8fde\u7eed\u4e0d\u65ad\u7684\uff0c\u6301\u7eed\u7684\n", "D": "vt.\u9a7e\u9a76\uff1b\u6253\u5165\uff1b\u9a71\n"}, {"question": "accompany", "answer": "A", "A": "vt.\u966a\u4f34\uff0c\u966a\u540c\uff1b\u4f34\u968f\n", "B": "vi.\u540c\u610f\uff1b\u6301\u76f8\u540c\u610f\u89c1\n", "C": "n.\u7fbd\u6bdb\u7403\n", "D": "n.\u951avi.\u629b\u951a\uff0c\u505c\u6cca\n"}, {"question": "accomplish", "answer": "B", "B": "vt.\u8fbe\u5230(\u76ee\u7684)\uff1b\u5b8c\u6210\n", "A": "int.\u518d\u4f1an.\u544a\u522b\n", "C": "a.\u5e74\u9f84\u8f83\u5927\u7684n.\u957f\u8005\n", "D": "n.\u654c\u4eba\uff1b\u4ec7\u654c\uff1b\u654c\u5175\n"}, {"question": "accord", "answer": "D", "D": "vt.\u4f7f\u4e00\u81f4\uff1b\u7ed9\u4e88\n", "A": "n.\u5206\u53d1\uff0c\u5206\u914d\uff1b\u5206\u5e03\n", "B": "n.\u526f\u8bcd\n", "C": "vt.\u4fdd\u8bc1\uff1b\u4fdd\u62a4\uff1b\u8d4b\u4e88\n"}, {"question": "accordance", "answer": "A", "A": "n.\u4e00\u81f4\uff1b\u548c\u8c10\uff1b\u6388\u4e88\n", "B": "n.\u5efa\u9020\uff1b\u5efa\u7b51\uff1b\u5efa\u7b51\u7269\n", "C": "n.\u82b1\uff0c\u82b1\u5349\uff1b\u5f00\u82b1\n", "D": "vi.&n.\u51cf\u5c11\uff0c\u51cf\u5c11\n"}, {"question": "accordingly", "answer": "B", "B": "ad.\u56e0\u6b64\uff0c\u6240\u4ee5\uff1b\u7167\u7740\n", "A": "vt.\u6218\u80dc\uff0c\u51fb\u8d25\uff1b\u632b\u8d25\n", "C": "vt.&vi.\u53e3\u6388\uff1b\u547d\u4ee4\n", "D": "ad.\u7ec8\u4e8e\uff1b\u6700\u540e\n"}, {"question": "account", "answer": "D", "D": "n.\u8bb0\u8ff0\uff1b\u89e3\u91ca\uff1b\u5e10\u76ee\n", "A": "vt.\u53d1\u5c55\uff1b\u5f62\u6210\uff1b\u5f00\u53d1\n", "B": "vt.\u4efb\u547d\uff0c\u59d4\u4efb\uff1b\u7ea6\u5b9a\n", "C": "ad.\u5b8c\u5168\uff1b\u603b\u800c\u8a00\u4e4b\n"}, {"question": "accumulate", "answer": "B", "B": "vt.\u79ef\u7d2fvi.\u5806\u79ef\n", "A": "n.\u542c\u4f17\uff0c\u89c2\u4f17\uff0c\u8bfb\u8005\n", "C": "n.\u98df\u6b32\uff0c\u80c3\u53e3\uff1b\u6b32\u671b\n", "D": "n.\u5fe7\u8651\uff0c\u60b2\u4f24\uff1b\u4e0d\u5e78\n"}, {"question": "accuracy", "answer": "A", "A": "n.\u51c6\u786e(\u6027)\uff1b\u51c6\u786e\u5ea6\n", "B": "n.\u8bc4\u8bba\uff0c\u610f\u89c1\uff1b\u6ce8\u91ca\n", "C": "n.\u8721\u70db\uff1b\u70db\u5f62\u7269\uff1b\u70db\u5149\n", "D": "n.\u8eab\u4f53\uff1b\u4e3b\u4f53\uff1b\u5c38\u4f53\n"}, {"question": "accurate", "answer": "D", "D": "a.\u51c6\u786e\u7684\uff0c\u6b63\u786e\u65e0\u8bef\u7684\n", "A": "vi.\u51fa\u73b0\uff1b\u7531\u2026\u5f15\u8d77\n", "B": "n.\u540c\u610f\uff0c\u8d5e\u6210vi.\u540c\u610f\n", "C": "n.(\u82f1)\u997c\u5e72\uff1b(\u7f8e)\u8f6f\u997c\n"}, {"question": "accuse", "answer": "D", "D": "vt.\u6307\u8d23\uff1b\u5f52\u548e\u4e8e\n", "A": "n.\u7406\u89e3\uff0c\u7406\u89e3\u529b\uff1b\u9886\u609f\n", "B": "ad.\u5b9e\u9645\u4e0a\uff1b\u7adf\u7136\n", "C": "pron.\u6bcf\u4ef6\u4e8b\uff0c\u4e8b\u4e8b\n"}, {"question": "affection", "answer": "C", "C": "n.\u6148\u7231\uff0c\u7231\uff1b\u7231\u6155\n", "A": "n.\u7403\uff0c\u7403\u72b6\u7269\uff1b\u821e\u4f1a\n", "B": "vi.\u51fa\u73b0\uff1b\u7531\u2026\u5f15\u8d77\n", "D": "vt.\u4f20\u9001\uff1b\u8fd0\u9001\uff1b\u4f20\u64ad\n"}, {"question": "afford", "answer": "B", "B": "vt.\u62c5\u8d1f\u5f97\u8d77\u2026\uff1b\u63d0\u4f9b\n", "A": "n.\u9152\u7cbe\uff0c\u4e59\u9187\n", "C": "n.\u9ed1\u677f\n", "D": "n.\u5c71\u6d1e\uff0c\u6d1e\u7a74\uff0c\u7a91\u6d1e\n"}, {"question": "afraid", "answer": "D", "D": "a.\u5bb3\u6015\u7684\uff1b\u62c5\u5fc3\u7684\n", "A": "vt.\u5206\u6790\uff0c\u5206\u89e3\uff0c\u89e3\u6790\n", "B": "a.\u51b3\u5b9a\u6027\u7684\uff1b\u6279\u8bc4\u7684\n", "C": "n.\u5341\u4e8c\u6708\n"}, {"question": "Africa", "answer": "C", "C": "n.\u975e\u6d32\n", "A": "vi.\u8df3\u821e\uff1b\u6447\u6643n.\u821e\n", "B": "pron.\u5404\uff0c\u5404\u81eaa.\u5404\n", "D": "n.\u9999\u8549\uff1b\u82ad\u8549\u5c5e\u690d\u7269\n"}, {"question": "African", "answer": "B", "B": "a.\u975e\u6d32\u7684n.\u975e\u6d32\u4eba\n", "A": "a.\u7edd\u5bf9\u7684\uff1b\u7eaf\u7cb9\u7684\n", "C": "vt.\u6398\uff0c\u6316\uff1b\u91c7\u6398\n", "D": "a.\u5f15\u4eba\u6ce8\u76ee\u7684\uff0c\u620f\u5267\u7684\n"}, {"question": "after", "answer": "B", "B": "prep.\u5728\u2026\u4ee5\u540e\uff1b\u6b21\u4e8e\n", "A": "n.\u6269\u5927\uff0c\u6269\u5145\uff1b\u6269\u5f20\n", "C": "n.\u5929\u4f7f\uff0c\u795e\u5dee\uff0c\u5b89\u742a\u513f\n", "D": "a.\u6602\u8d35\u7684\uff0c\u82b1\u94b1\u591a\u7684\n"}, {"question": "afternoon", "answer": "D", "D": "n.\u4e0b\u5348\uff0c\u5348\u540e\n", "A": "vt.\u8bbe\u8ba1\uff0c\u53d1\u660e\n", "B": "n.\u7ec6\u7ef3\uff0c\u7c97\u7ebf\uff0c\u7d22\n", "C": "n.\u72d7\uff0c\u72ac\uff0c\u72ac\u79d1\u52a8\u7269\n"}, {"question": "afterward", "answer": "A", "A": "ad.\u540e\u6765\uff0c\u4ee5\u540e\n", "B": "a.\u6bcf\u5e74\u7684n.\u5e74\u62a5\n", "C": "a.\u810f\u7684\uff1b\u4e0b\u6d41\u7684\n", "D": "n.\u5927\u9646\uff1b\u9646\u5730\uff1b\u6d32\n"}, {"question": "again", "answer": "A", "A": "ad.\u53c8\u4e00\u6b21\uff1b\u800c\u4e14\n", "B": "vt.\u4f7f\u6df7\u4e71\uff0c\u6df7\u6dc6\n", "C": "vt.\u4f7f\u53d1\u5149\uff1b\u4f7f\u5feb\u6d3b\n", "D": "a.\u51b7\u7684\uff1b\u51b7\u6de1\u7684n.\u51b7\n"}, {"question": "against", "answer": "A", "A": "prep.\u501a\u5728\uff1b\u9006\uff0c\u5bf9\u7740\n", "B": "n.\u60ac\u5d16\uff0c\u5ced\u58c1\n", "C": "a.\u6d3b\u7740\u7684\uff1b\u6d3b\u8dc3\u7684\n", "D": "vt.&n.\u4e0d\u559c\u7231\uff0c\u538c\u6076\n"}, {"question": "age", "answer": "A", "A": "n.\u5e74\u9f84\uff1b\u65f6\u4ee3vt.\u53d8\u8001\n", "B": "n.\u5192\u9669\uff1b\u60ca\u9669\u6d3b\u52a8\n", "C": "a.\u6613\u5f2f\u66f2\u7684\uff1b\u7075\u6d3b\u7684\n", "D": "prep.\u4efb\u4f55\u4eba\n"}, {"question": "agency", "answer": "C", "C": "n.\u7ecf\u529e\uff1b\u4ee3\u7406\uff1b\u4ee3\u7406\u5904\n", "A": "n.\u988f\uff0c\u4e0b\u5df4\n", "B": "prep.\u5173\u4e8e\n", "D": "n.\u6bd4\u8f83\uff0c\u5bf9\u7167\uff1b\u6bd4\u4f3c\n"}, {"question": "agent", "answer": "B", "B": "n.\u4ee3\u7406\u4eba\uff0c\u4ee3\u7406\u5546\n", "A": "vi.\u5b58\u5728\uff1b\u751f\u5b58\uff0c\u751f\u6d3b\n", "C": "vt.\u80cc\u53db\uff1b\u8f9c\u8d1f\uff1b\u6cc4\u6f0f\n", "D": "ad.\u5728\u4ec0\u4e48\u5730\u65b9\n"}, {"question": "aggressive", "answer": "A", "A": "a.\u4fb5\u7565\u7684\uff1b\u597d\u6597\u7684\n", "B": "n.\u6d88\u8017\u91cf\uff1b\u6d88\u8017\n", "C": "n.\u7248\uff0c\u7248\u672c\uff0c\u7248\u6b21\n", "D": "vt.\u6d88\u706d\uff0c\u6d88\u9664\uff0c\u6392\u9664\n"}, {"question": "ago", "answer": "D", "D": "ad.\u4ee5\u524d\n", "A": "n.\u6ce1vi.\u5192\u6ce1\uff0c\u6cb8\u817e\n", "B": "vt.\u4e22\u5f03\uff1b\u653e\u5f03\uff0c\u629b\u5f03\n", "C": "n.\u68c9\uff1b\u68c9\u7ebf\uff1b\u68c9\u5e03\n"}, {"question": "agony", "answer": "A", "A": "n.\u6781\u5ea6\u75db\u82e6\n", "B": "n.\u521d\u5b66\u8005\uff0c\u751f\u624b\n", "C": "n.\u5efa\u7b51\u7269\uff0c\u5927\u697c\uff1b\u5efa\u7b51\n", "D": "n.\u5706\u5468\uff0c\u5468\u957f\uff0c\u5706\u5468\u7ebf\n"}, {"question": "agree", "answer": "D", "D": "vi.\u540c\u610f\uff1b\u6301\u76f8\u540c\u610f\u89c1\n", "A": "n.\u7ec6\u8282\uff1b\u679d\u8282\uff1b\u96f6\u4ef6\n", "B": "n.\u7ec6\u83cc\n", "C": "n.\u751f\u6daf\uff0c\u804c\u4e1a\uff0c\u7ecf\u5386\n"}, {"question": "agreement", "answer": "A", "A": "n.\u534f\u5b9a\uff0c\u534f\u8bae\uff1b\u540c\u610f\n", "B": "ad.\u786e\u5207\u5730\uff1b\u6070\u6070\u6b63\u662f\n", "C": "n.\u7406\u89e3\uff0c\u7406\u89e3\u529b\uff1b\u9886\u609f\n", "D": "n.\u5956\uff0c\u5956\u54c1\uff1b\u5224\u5b9a\n"}, {"question": "agriculture", "answer": "B", "B": "n.\u519c\u4e1a\uff0c\u519c\u827a\uff1b\u519c\u5b66\n", "A": "vt.\u5206\u53d1\uff0c\u5206\u9001\uff1b\u5206\u5e03\n", "C": "n.\u78b0\u649e\uff1b\u51b2\u7a81\n", "D": "n.\u6218\u5f79\uff1b\u8fd0\u52a8\n"}, {"question": "ahead", "answer": "C", "C": "ad.\u5728\u524d\uff1b\u5411\u524d\uff1b\u63d0\u524d\n", "A": "a.\u5371\u9669\u7684\uff0c\u4e0d\u5b89\u5168\u7684\n", "B": "a.\u540c\u6837\u7684\uff0c\u76f8\u540c\u7684\n", "D": "vt.&vi.\u4e5e\u6c42\uff1b\u8bf7\u6c42\n"}, {"question": "aid", "answer": "A", "A": "n.\u5e2e\u52a9\uff0c\u6551\u62a4\uff1b\u52a9\u624b\n", "B": "n.\u675f\uff0c\u7403\uff0c\u4e32\uff1b\u4e00\u7fa4\n", "C": "vt.\u6307\u6d3e\uff1b\u5206\u914d\uff1b\u6307\u5b9a\n", "D": "vt.\u902e\u6355\uff0c\u62d8\u7559\uff1b\u963b\u6b62\n"}, {"question": "aim", "answer": "B", "B": "vi.\u7784\u51c6\uff0c\u9488\u5bf9\uff1b\u81f4\u529b\n", "A": "a.\u5bc6\u96c6\u7684\uff1b\u6d53\u539a\u7684\n", "C": "n.\u957f\u51f3\uff0c\u6761\u51f3\uff1b\u5de5\u4f5c\u53f0\n", "D": "n.\u6d2a\u6c34vt.\u6df9\u6ca1\n"}, {"question": "air", "answer": "B", "B": "n.\u7a7a\u6c14\uff1b\u7a7a\u4e2d\uff1b\u5916\u89c2\n", "A": "n.\u53e3\u6388\u7b14\u5f55\uff0c\u542c\u5199\n", "C": "ad.\u76f8\u53cd\u5730\n", "D": "n.\u5706\u76d8\uff0c\u5531\u7247\uff1b\u78c1\u76d8\n"}, {"question": "aircraft", "answer": "A", "A": "n.\u98de\u673a\uff0c\u98de\u884c\u5668\n", "B": "a.\u70ed\u60c5\u7684\uff0c\u70ed\u5fc3\u7684\n", "C": "n.\u73ed\uff0c\u73ed\u7ea7\uff1b\u9636\u7ea7\n", "D": "n.\u65e5\u5386\uff0c\u5386\u4e66\uff1b\u5386\u6cd5\n"}, {"question": "airline", "answer": "C", "C": "n.\u822a\u7a7a\u516c\u53f8\uff1b\u822a\u7ebf\n", "A": "vt.\u7b79\u5907\uff1b\u6574\u7406\uff1b\u8c03\u89e3\n", "B": "prep.\u501a\u5728\uff1b\u9006\uff0c\u5bf9\u7740\n", "D": "n.\u5730\u9707\uff1b\u5927\u9707\u8361\n"}, {"question": "airplane", "answer": "D", "D": "n.\u98de\u673a\n", "A": "vt.\u4f7f\u5faa\u73afvi.\u5faa\u73af\n", "B": "vt.\u4f7f\u5931\u671b\uff0c\u4f7f\u53d7\u632b\u6298\n", "C": "vi.\u5b58\u5728\uff1b\u751f\u5b58\uff0c\u751f\u6d3b\n"}, {"question": "airport", "answer": "B", "B": "n.\u673a\u573a\uff0c\u822a\u7a7a\u7ad9\n", "A": "a.\u7279\u6709\u7684n.\u7279\u6027\n", "C": "n.\u707e\u96be\uff0c\u707e\u7978\uff1b\u5929\u707e\n", "D": "n.\u80f8\uff0c\u80f8\u90e8\uff1b\u5185\u5fc3\n"}, {"question": "alarm", "answer": "D", "D": "n.\u60ca\u6050\uff0c\u5fe7\u8651\uff1b\u8b66\u62a5\n", "A": "n.\u4e91\uff1b\u4e91\u72b6\u7269\uff1b\u9634\u5f71\n", "B": "n.\u73af\u5883\uff0c\u5916\u754c\uff1b\u56f4\u7ed5\n", "C": "n.\u7ebf\u7d22\uff0c\u6697\u793a\uff0c\u63d0\u793a\n"}, {"question": "alcohol", "answer": "A", "A": "n.\u9152\u7cbe\uff0c\u4e59\u9187\n", "B": "n.\u767d\u5170\u5730\u9152\n", "C": "n.\u68cb\uff1b\u56fd\u9645\u8c61\u68cb\n", "D": "n.\u5730\u677f\uff1b\u697c\u5c42\n"}, {"question": "alike", "answer": "D", "D": "a.\u540c\u6837\u7684\uff0c\u76f8\u540c\u7684\n", "A": "n.\u5efa\u9020\uff1b\u5efa\u7b51\uff1b\u5efa\u7b51\u7269\n", "B": "ad.\u603b\u662f\uff0c\u4e00\u76f4\uff1b\u6c38\u8fdc\n", "C": "prep.\u5728\u2026\u4e4b\u4e2d\n"}, {"question": "alive", "answer": "A", "A": "a.\u6d3b\u7740\u7684\uff1b\u6d3b\u8dc3\u7684\n", "B": "n.\u6218\u5f79\uff1b\u6597\u4e89vi.\u4f5c\u6218\n", "C": "vt.\u9009\u4e3e\uff0c\u63a8\u9009\uff1b\u9009\u62e9\n", "D": "n.\u8111\uff0c\u8111\u9ad3\uff1b\u8111\u529b\n"}, {"question": "all", "answer": "B", "B": "a.\u5168\u90e8\u7684prep.\u5168\u90e8\n", "A": "a.\u6602\u8d35\u7684\uff1b\u4ef7\u503c\u9ad8\u7684\n", "C": "n.\u9e26\uff0c\u4e4c\u9e26vi.\u557c\n", "D": "n.\u5165\u53e3\u5904\uff1b\u767b\u8bb0\uff1b\u8fdb\u5165\n"}, {"question": "allow", "answer": "A", "A": "vt.\u5141\u8bb8\uff0c\u51c6\u8bb8\uff1b\u4efb\n", "B": "n.\u56fe\uff0c\u56fe\u8868\uff1b\u6d77\u56fe\n", "C": "vt.\u780d\uff0c\u5288\uff1b\u5207\u7ec6vi.\u780d\n", "D": "n.\u74f6\uff0c\u9152\u74f6\uff1b\u4e00\u74f6\n"}, {"question": "alloy", "answer": "B", "B": "n.\u5408\u91d1\uff1b(\u91d1\u5c5e\u7684)\u6210\u8272\n", "A": "ad.\u4e00\u5b9a\u5730\uff0c\u660e\u786e\u5730\n", "C": "n.\u70b8\u5f39vt.\u8f70\u70b8\n", "D": "vt.\u96c6\u4e2d\uff1b\u805a\u96c6\uff1b\u6d53\u7f29\n"}, {"question": "almost", "answer": "B", "B": "ad.\u51e0\u4e4e\uff0c\u5dee\u4e0d\u591a\n", "A": "vt.\u8d5e\u6210\uff0c\u79f0\u8bb8\uff1b\u6279\u51c6\n", "C": "a.\u62fc\u6b7b\u7684\uff1b\u7edd\u671b\u7684\n", "D": "vt.\u529d\u544a\uff1b\u5efa\u8bae\uff1b\u901a\u77e5\n"}, {"question": "alone", "answer": "C", "C": "a.\u5355\u72ec\u7684ad.\u5355\u72ec\u5730\n", "A": "vt.\u5047\u5b9a\uff1b\u627f\u62c5\uff1b\u5448\u73b0\n", "B": "n.\u9f99\uff1b\u51f6\u66b4\u7684\u4eba\n", "D": "vt.\u65ad\u8a00\uff1b\u58f0\u660e\uff1b\u8868\u660e\n"}, {"question": "along", "answer": "B", "B": "prep.\u6cbf\u7740ad.\u5411\u524d\n", "A": "vt.\u56de\u7b54\uff1b\u54cd\u5e94\uff1b\u9002\u5e94\n", "C": "vt.&vi.\u5938\u5927\uff0c\u5938\u5f20\n", "D": "n.\u7167\u76f8\u673a\uff0c\u6444\u5f71\u673a\n"}, {"question": "aloud", "answer": "D", "D": "ad.\u51fa\u58f0\u5730\uff0c\u5927\u58f0\u5730\n", "A": "vt.\u4f7f\u6cc4\u6c14\uff0c\u4f7f\u7070\u5fc3\n", "B": "a.\u6bcf\u5e74\u7684n.\u5e74\u62a5\n", "C": "n.\u60f3\u8c61\u529b\uff1b\u8bbe\u60f3\uff1b\u7231\u597d\n"}, {"question": "alphabet", "answer": "A", "A": "n.\u5b57\u6bcd\u8868\uff0c\u5b57\u6bcd\u7cfb\u7edf\n", "B": "n.\u7897\u67dc\uff0c\u7897\u789f\u6a71\uff1b\u98df\u6a71\n", "C": "prep.\u5728\u2026\u91cc\uff1b\u5728\u2026\u65f6\n", "D": "vt.\u70e6\u6270\uff0c\u8ff7\u60d1n.\u9ebb\u70e6\n"}, {"question": "already", "answer": "A", "A": "ad.\u65e9\u5df2\uff0c\u5df2\u7ecf\n", "B": "vt.\u4e70\uff0c\u8d2d\u4e70vi.\u4e70\n", "C": "vt.\u4efb\u547d\uff0c\u59d4\u4efb\uff1b\u7ea6\u5b9a\n", "D": "vt.\u7ed9\u2026\u6d17\u6fa1\uff1b\u5f04\u6e7f\n"}, {"question": "also", "answer": "A", "A": "ad.\u4ea6\uff0c\u4e5f\uff1b\u800c\u4e14\uff0c\u8fd8\n", "B": "vt.\u906d\u9047\uff0c\u9047\u5230n.\u906d\u9047\n", "C": "vt.\u5f15\u8d77\uff0c\u5524\u8d77\uff1b\u5524\u9192\n", "D": "a.\u7ea4\u7ec6\u7684\uff1b\u6613\u788e\u7684\n"}, {"question": "alter", "answer": "C", "C": "vt.\u6539\u53d8\uff0c\u53d8\u66f4\uff1b\u6539\u505a\n", "A": "pron.\u4efb\u4f55\u4e8b\u7269\uff1b\u4e00\u5207\n", "B": "n.\u9762\u5305\u76ae\uff1b\u786c\u5916\u76ae\n", "D": "a.\u5dee\u5f02\u7684\uff1b\u5404\u79cd\u7684\n"}, {"question": "alternative", "answer": "C", "C": "n.\u66ff\u6362\u7269\uff1b\u53d6\u820d\uff0c\u6289\u62e9\n", "A": "n.\u4e8c\u6708\n", "B": "n.\u8910\u8272\uff0c\u68d5\u8272\n", "D": "n.\u540c\u4e8b\uff0c\u540c\u50da\n"}, {"question": "although", "answer": "D", "D": "conj.\u5c3d\u7ba1\uff0c\u867d\u7136\n", "A": "vt.\u62c5\u8d1f\u5f97\u8d77\u2026\uff1b\u63d0\u4f9b\n", "B": "n.\u901a\u4fe1\u8005\uff1b\u901a\u8baf\u5458\n", "C": "vt.\u9884\u6599\uff0c\u9884\u671f\uff0c\u671f\u671b\n"}, {"question": "altitude", "answer": "B", "B": "n.\u9ad8\uff0c\u9ad8\u5ea6\uff1b\u9ad8\u5904\n", "A": "n.\u9752\u94dc\uff1b\u9752\u94dc\u5236\u54c1\n", "C": "n.\u9519\u8bef\uff0c\u8c2c\u8bef\uff1b\u5dee\u9519\n", "D": "a.\u52e4\u52c9\u7684\uff0c\u52e4\u594b\u7684\n"}, {"question": "altogether", "answer": "A", "A": "ad.\u5b8c\u5168\uff1b\u603b\u800c\u8a00\u4e4b\n", "B": "n.\u5c60\u592b\uff1b\u5c60\u6740\u8005\n", "C": "n.\u751f\u7269\u5b66\uff1b\u751f\u6001\u5b66\n", "D": "n.\u5c60\u592b\uff1b\u5c60\u6740\u8005\n"}, {"question": "apology", "answer": "A", "A": "n.\u9053\u6b49\uff0c\u8ba4\u9519\uff0c\u8c22\u7f6a\n", "B": "n.\u6728\u5de5\uff0c\u6728\u5320\n", "C": "n.\u4efb\u547d\uff1b\u7ea6\u5b9a\uff0c\u7ea6\u4f1a\n", "D": "vt.\u643a\u5e26\uff1b\u8fd0\u8f7d\uff1b\u4f20\u9001\n"}, {"question": "apparatus", "answer": "C", "C": "n.\u5668\u68b0\uff0c\u4eea\u5668\uff1b\u5668\u5b98\n", "A": "vt.\u5c06\u2026\u5904\u6b7b\uff1b\u5b9e\u65bd\n", "B": "n.\u9999\u8549\uff1b\u82ad\u8549\u5c5e\u690d\u7269\n", "D": "a.\u4fdd\u5b88\u7684n.\u4fdd\u5b88\u7684\u4eba\n"}, {"question": "apparent", "answer": "C", "C": "a.\u8868\u9762\u4e0a\u7684\uff1b\u660e\u663e\u7684\n", "A": "a.\u672c\u56fd\u7684\uff1b\u5bb6\u5ead\u7684\n", "B": "n.\u8ba8\u8bba\uff0c\u8c08\u8bba\uff1b\u8bba\u8ff0\n", "D": "n.\u6539\u6b63\uff0c\u7ea0\u6b63\uff0c\u4fee\u6539\n"}, {"question": "appeal", "answer": "B", "B": "vi.&n.\u547c\u5401\uff1b\u7533\u8ff0\n", "A": "n.\u57fa\u7763\u6559\u5f92\uff1b\u4fe1\u5f92\n", "C": "vi.\u9003\u8dd1\uff1b\u9038\u51fan.\u9003\u8dd1\n", "D": "n.\u6805\u680f\uff0c\u5c4f\u969c\uff1b\u969c\u788d\n"}, {"question": "appear", "answer": "B", "B": "vi.\u51fa\u73b0\uff1b\u6765\u5230\uff1b\u4f3c\u4e4e\n", "A": "n.\u7bad\uff1b\u7bad\u72b6\u7269\n", "C": "vi.\u51fa\u73b0\uff1b\u6765\u5230\uff1b\u4f3c\u4e4e\n", "D": "n.\u5171\u4ea7\u4e3b\u4e49\n"}, {"question": "appearance", "answer": "B", "B": "n.\u51fa\u73b0\uff0c\u6765\u5230\uff1b\u5916\u89c2\n", "A": "a.\u4e0d\u65ad\u7684\uff1b\u8fde\u7eed\u7684\n", "C": "a.\u76f8\u5e94\u7684\uff1b\u7b26\u5408\u7684\n", "D": "ad.\u5b9e\u9645\u4e0a\uff1b\u7adf\u7136\n"}, {"question": "appetite", "answer": "B", "B": "n.\u98df\u6b32\uff0c\u80c3\u53e3\uff1b\u6b32\u671b\n", "A": "vt.\u5bdf\u89c9\uff0c\u53d1\u89c9\uff1b\u4fa6\u5bdf\n", "C": "n.\u66f2\u7ebf\uff1b\u5f2fvt.\u5f04\u5f2f\n", "D": "a.\u8212\u9002\u7684\uff0c\u5b89\u6170\u7684\n"}, {"question": "apple", "answer": "B", "B": "n.\u82f9\u679c\uff0c\u82f9\u679c\u6811\n", "A": "a.\u53ef\u884c\u7684\uff1b\u53ef\u80fd\u7684\n", "C": "ad.\u603b\u662f\uff0c\u4e00\u76f4\uff1b\u6c38\u8fdc\n", "D": "vi.\u62f3\u51fb\uff0c\u6253\u62f3\n"}, {"question": "appliance", "answer": "A", "A": "n.\u7528\u5177\uff0c\u5668\u5177\uff0c\u5668\u68b0\n", "B": "vt.\u6b23\u8d4f\uff1b\u9886\u4f1a\uff1b\u611f\u8c22\n", "C": "a.\u8212\u9002\u7684\uff0c\u5b89\u6170\u7684\n", "D": "n.\u5927\u70ae\uff0c\u706b\u70ae\uff1b\u69b4\u5f39\u70ae\n"}, {"question": "applicable", "answer": "B", "B": "a.\u80fd\u5e94\u7528\u7684\uff1b\u9002\u5f53\u7684\n", "A": "prep.\u5728\u2026\u540e\u9762\n", "C": "n.\u59d4\u4efb\u72b6\uff1b\u59d4\u5458\u4f1a\n", "D": "a.\u806a\u660e\u7684\uff1b\u673a\u654f\u7684\n"}, {"question": "application", "answer": "B", "B": "n.\u8bf7\u6c42\uff0c\u7533\u8bf7\uff1b\u65bd\u7528\n", "A": "vt.\u906d\u9047\uff0c\u9047\u5230n.\u906d\u9047\n", "C": "n.\u8f66\u8d39\uff0c\u8239\u8d39\uff0c\u7968\u4ef7\n", "D": "n.\u60c5\u51b5\uff1b\u4e8b\u5b9e\uff1b\u75c5\u4f8b\n"}]
+        if(localStorage.getItem("question")){
+            localStorage.setItem("question",JSON.stringify(test))
+        }
+        
+      </script>
+
+
+      <script src="./js/vue.js"></script>
+      <script src="./js/elementui.js"></script>
+
+
+
+      <script>
+        new Vue({
+            el: '#app',
+            data: {
+                currentDate: new Date(),
+                contentMenu:[],
+                flag:0,
+                currentLogin: {},
+            },
+            mounted() {
+
+
+                //获取localStorage中的currentLogin
+                currentLogin = JSON.parse(localStorage.getItem('currentLogin'));
+                console.log(currentLogin);
+                if(currentLogin == null || currentLogin == undefined || JSON.stringify(currentLogin) =='{}'){
+                    this.currentLogin = {};
+                }else{
+                    console.log("执行到这里啦")
+                    this.currentLogin = currentLogin;
+                    this.flag = 1;
+                }
+                setTimeout(() => {
+                    
+
+                    localStorage.getItem('menucontent') ? this.contentMenu = JSON.parse(localStorage.getItem('menucontent')) : this.contentMenu = [{"title":"四级单词","key":"a","detail":"四级单词四级单词"},{"title":"六级单词","key":"b","detail":"六级单词六级单词"},{"title":"考研单词","key":"c","detail":"考研单词考研单词"},{"title":"软考真题","key":"d","detail":"软考真题" }],localStorage.setItem('menucontent',JSON.stringify(this.contentMenu))
+                    console.log(this.contentMenu)
+
+
+                }, 1000);
+            },
+            methods: {
+                handlestartstudy(index){
+                    console.log(index)
+                    localStorage.setItem('currentMenu',JSON.stringify(this.contentMenu[index]))
+                    
+                }
+                ,
+                answerChange(e){
+                    console.log(e.target)
+                    //获取e.target的父元素
+                    var parent = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
+                    //获取parent的的一个子元素
+                    var child = parent.children[0];
+                    var content_choice = child.innerText
+                    if(content_choice =="软考真题"){
+                        window.location.href = "./answer.html" 
+                    }else if(content_choice == "四级单词"){
+                        window.location.href = "./mobile.html?type=4&cnt=25"
+
+                    }else if(content_choice == "六级单词"){
+                        window.location.href = "./mobile.html?type=6&cnt=25"
+                    
+                    }else if(content_choice == "考研单词"){
+                        window.location.href = "./mobile.html?type=ky&cnt=25"
+                    }else if(content_choice == "高中单词"){
+                        window.location.href = "./mobile.html?type=gz&cnt=25"
+                    }else if(content_choice == "初中单词"){
+                        window.location.href = "./mobile.html?type=cz&cnt=25"
+                    }else if(content_choice == "专升本单词"){
+                        window.location.href = "./mobile.html?type=zsb&cnt=25"
+                    }
+
+                    console.log(parent)
+                }
+            }
+        })
+1
+      </script>
+
+
+
+<script>
+
+
+    //添加一个屏幕宽度变化的监听器
+    window.addEventListener('resize', function () {
+        //获取屏幕宽度
+        var width = window.innerWidth;
+        //获取元素
+        var element = document.getElementById('ID-carousel-demo-image');
+        //设置元素的宽度
+        element.style.width = width-20 + 'px';
+        //设置元素的高度
+        element.style.height = width / 2- 20 + 'px';
+    });
+    layui.use(function(){
+      var carousel = layui.carousel;
+      // 渲染 - 图片轮播
+      carousel.render({
+        elem: '#ID-carousel-demo-image',
+        width: '720px',
+        height: '200px',
+        interval: 3000
+      });
+    });
+    </script>
+
+</body>
+</html>

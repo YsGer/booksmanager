@@ -1,0 +1,25 @@
+
+
+
+
+*{
+
+    padding: 0;
+    margin: 0;
+}
+
+li{
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;;
+}
+
+li:active{
+    color:red;
+    border-bottom: 3px blue solid;
+}
+
+li:hover{
+    
+    
+}

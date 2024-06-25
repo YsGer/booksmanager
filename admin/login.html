@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录与注册页面</title>
+    <style>
+        .content {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            margin: 0;
+        }
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background-color: #5cb85c;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .form-group button:hover {
+            background-color: #4cae4c;
+        }
+        .toggle-form {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .toggle-form button {
+            background-color: #337ab7;
+            padding: 8px 15px;
+            border: none;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .toggle-form button:hover {
+            background-color: #286090;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+  
+<script src="../js/axios.min.js"></script>
+
+</head>
+<body>
+
+        <h1 style="text-align: center;">管理员登录页面</h1>
+<div class="content">
+    <div class="form-container">
+        <div id="login-form">
+            <h2>登录</h2>
+            <div class="form-group">
+                <label for="login-username">用户名：</label>
+                <input type="text" id="login-username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">密码：</label>
+                <input type="password" id="login-password" name="password" required>
+            </div>
+            <div class="form-group">
+                <button id="login_test" onclick="login()">登录</button>
+            </div>
+        </div>
+        <div id="register-form" class="hidden">
+            <h2>注册</h2>
+            <div class="form-group">
+                <label for="register-username">用户名：</label>
+                <input type="text" id="register-username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="register-email">邮箱：</label>
+                <input type="email" id="register-email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="register-password">密码：</label>
+                <input type="password" id="register-password" name="password" required>
+            </div>
+            <div class="form-group">
+                <button onclick="register()">注册</button>
+            </div>
+        </div>
+        <div class="toggle-form">
+            <button id="switch_login_register" onclick="toggleForm()">没有账号？点击注册</button>
+        </div>
+    </div>
+</div>
+    <!-- 最新版本的 Axios -->
+
+
+
+
+    <script>
+            let users = JSON.parse( localStorage.getItem("userAccounts"))
+            console.log(users)
+      //找到id为login_test的按钮，添加点击事件
+      
+
+        function toggleForm() {
+            var loginForm = document.getElementById('login-form');
+            var registerForm = document.getElementById('register-form');
+            if (loginForm.classList.contains('hidden')) {
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+            } else {
+                registerForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+            }
+        }
+
+        function login() {
+          console.log("test1");
+          console.log(users)
+          console.log(users[0])
+            var username = document.getElementById('login-username').value;
+            var password = document.getElementById('login-password').value;
+            for(let i = 0; i < users.length; i++){
+                console.log(users[i].username)
+                if(users[i].username == username && users[i].password == password){
+
+                    if(users[i].authority == "管理员" || users[i].authority == "超级管理员"){
+                        alert("登录成功");
+                        window.location.href = "http://localhost:5500/admin/index.html";
+                        return
+                    
+                    }
+                }
+            }
+            // 这里应该添加验证输入的逻辑
+            // 发送登录请求到服务器
+            //axios发送json格式数据
+            /*axios.post("http://localhost:5220/api/user/Loginuser", {
+                username: username,
+                password: password
+            }).then(function (response) {
+                if(response['data']=="登录成功"){
+                    alert("登录成功");
+                    window.location.href = "http://localhost:5500/admin/index.html";
+                }else{
+                    alert("登录失败-用户名或者密码错误")
+                }
+
+            }).catch(function (error) {
+                console.log(error);
+            });*/
+
+
+            //循环判断username和password是否在users里面
+            
+            
+            
+
+
+
+            
+        }
+
+        function register() {
+            var username = document.getElementById('register-username').value;
+            var email = document.getElementById('register-email').value;
+            var password = document.getElementById('register-password').value;
+            /*axios.post('http://localhost:5220/api/user/adduser', {
+                username: username,
+                password: password
+            }).then(function (response) {
+                console.log(response);
+            }).catch(function (error) {
+                console.log(error);
+            });*/
+            alert("注册成功");
+            
+        }
+          
+            //document.getElementById('login_test').addEventListener('click', login );
+
+
+            let switch_element = document.getElementById('switch_login_register')
+            //找到id为switch_login_register元素
+            function switch_login_register(){
+              if(switch_element.innerText == "没有账号？点击注册"){
+                switch_element.innerText = "已有账号？点击登录"}
+                else{
+
+                    switch_element.innerText = "没有账号？点击注册"
+                    
+                }
+            }
+            switch_element.addEventListener('click', switch_login_register )
+            document.getElementById("login-password").addEventListener('keydown', function(e){
+                if(e.key == "Enter"){
+                    login()
+                }
+            })
+            //添加点击事件
+
+    </script>
+
+</body>

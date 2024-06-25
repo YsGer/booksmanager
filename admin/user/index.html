@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+
+        .profile h2 {
+            margin: 0;
+        }
+
+        .menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: space-around;
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .menu li {
+            cursor: pointer;
+        }
+
+        .menu li:hover {
+            text-decoration: underline;
+        }
+
+        .content {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .content h3 {
+            margin: 0 0 10px 0;
+        }
+
+        .content p {
+            margin: 0;
+        }
+    </style>
+
+
+
+    <link rel="stylesheet" href="../../css/elemetui.css">
+    <script src="../../js/vue.js"></script>
+    <script src="../../js/elementui.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <div class="header">
+                <h1>个人中心</h1>
+            </div>
+    
+            <div class="profile">
+                <img src="https://via.placeholder.com/100" alt="头像">
+                <div>
+                    <h2>{{test}}</h2>
+                    <p>管理员</p>
+                </div>
+            </div>
+    
+            <ul class="menu">
+                <li>我的资料</li>
+                <li>我的订单</li>
+                <li>我的收藏</li>
+                <li><a href="./userpwdmodify.html">修改密码</a></li>
+                <li>退出登录</li>
+            </ul>
+    
+            <div class="content">
+                <h3>我的资料</h3>
+                <p>姓名：{{currentLogin.username}}</p>
+                <p>性别：男</p>
+                <p>权限：{{currentLogin.authority}}</p>
+                <p>年龄：25</p>
+                <p>手机号码：13800138000</p>
+                <p>邮箱：zhangsan@example.com</p>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                showSidebar: true,
+                currentLogin:{}
+            },
+            methods: {
+                toggleSidebar() {
+                    this.showSidebar = !this.showSidebar;
+                }
+            },
+            mounted() {
+                this.currentLogin = JSON.parse(localStorage.getItem('currentLogin'));
+
+                document.getElementById('hiddenOrshow').addEventListener('click', this.toggleSidebar);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./js/axios.min.js"></script>
+    <link rel="stylesheet" href="./layui/css/layui.css">
+    <script src="./layui/layui.js"></script>
+    <style>
+        .mytest{
+            
+        }
+        .mytest:hover{
+           
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    
+
+    <div id="content">
+        <ul class="layui-nav layui-bg-green ">
+            <li style="margin-left: 10px;" class="my_li layui-nav-item mytest">首页</li>
+            <li style="margin-left: 10px;" class="my_li layui-nav-item mytest">要闻</li>
+            <li style="margin-left: 10px;" class="my_li layui-nav-item mytest">媒体云大</li>
+            <li style="margin-left: 10px;" class="my_li layui-nav-item mytest">综合新闻</li>
+            <li style="margin-left: 10px;" class="my_li layui-nav-item mytest">图片云大</li>
+            <li style="margin-left: 10px;" class="my_li layui-nav-item mytest">视频云大</li>
+            <li style="margin-left: 10px;" class="my_li layui-nav-item mytest">云大校报</li>
+
+      
+
+        </ul>
+    </div>
+
+
+    <script>
+        let url = new URL(window.location.href);
+        let params = new URLSearchParams(url.search);
+        let name = params.get('name');
+        let id = params.get('id');
+
+        
+        axios.post("http://localhost:5220/api/user/get_content_by_id",data={'id':id}).then(
+            (response)=>{
+                document.getElementById('content').innerHTML = response.data['title'];
+            }
+            ).catch((error)=>{
+                console.log(error);
+            }
+        )
+
+
+       
+
+
+
+    </script>
+</body>
+</html>

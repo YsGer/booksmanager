@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./layui/css/layui.css">
+
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        .test1{
+
+        }
+        .select_item{
+            background-color: red;
+        }
+        ul li {
+            text-decoration: none;
+            list-style: none    ;
+        }
+        .collapse-content {
+            width: 24px;
+            height: 24px;
+            background: #fff;
+            border-radius: 4px 4px 4px 4px;
+            opacity: 1;
+            border: 1px solid #d8d8d8;
+            color: #1d2129;
+            font-size: 13px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            position: relative
+        }
+        .test1::-webkit-scrollbar{
+            width: 12px;  /* 对于垂直滚动条，设置宽度 */
+        }
+
+        /* 自定义整个滚动条 */
+            .test1::-webkit-scrollbar {
+            width: 12px;  /* 对于垂直滚动条，设置宽度 */
+            height: 12px; /* 对于水平滚动条，设置高度 */
+            }
+            
+            /* 自定义滚动条轨道 */
+            .test1::-webkit-scrollbar-track {
+            background: #white; /* 轨道颜色 */
+            }
+            
+            /* 自定义滚动条的滑块（thumb） */
+            .test1::-webkit-scrollbar-thumb {
+            background: #d4d7dd; /* 滑块颜色 */
+            }
+            
+            /* 当滑块悬停或活动时，可以设置不同的颜色 */
+            .test1::-webkit-scrollbar-thumb:hover {
+            background: white;
+            opacity: 0;
+            }
+
+            p{
+                font-size: 20px;
+            }
+            label {
+                display: inline-block;
+                margin-right: 10px;
+            }
+            input[type="radio"] {
+                margin-right: 5px;
+            }
+    </style>
+    <script src="./js/vue.js"></script>
+    <script src="./js/axios.min.js"></script>
+</head>
+<body>
+
+
+<div id="app">
+    <div id="header" style="background-color: #1f63fb; height: 48px; line-height: 48px; ">全国计算机技术与软件专业技术资格(水平)考试机考模拟系统</div>
+<div id="content" style="width: 100%;height: 650px; display: flex; ">
+
+    <div style="width: 200px;">
+
+        <div style="display: flex; align-items: center; flex-direction: column; background-color: white; ">
+            <img src="./img/user.png" style="width: 120px;height: 120px;" alt="">
+        </div>
+        <div style="display: flex;">
+            <div style="flex:2">
+                <div>姓名</div>
+                <div>性别</div>
+                <div>准考证号</div>
+                <div>身份证号</div>
+                <div>考试科目</div>
+            </div>
+            <div style="flex: 3;">
+                <div>{{currentLogin.username}}</div>
+                <div>1234</div>
+                <div>532129199802</div>
+                <div>马云</div>
+                <div>马云</div>
+            </div>
+            
+        </div>
+        <div><h3>系统规划管理师</h3>
+        </div>
+        <div style="display: flex;">
+                
+
+                <div  style=" margin-top: 10px;  flex: 1.4; flex-wrap: wrap; height: 200px; background-color: white; overflow-y: scroll;">
+
+                        <div v-for="(item,index) in t " style="display: inline-block; margin-left:2px;">
+                            <div @click="handleClick" style="display: inline-block; width: 30px; height: 20px; line-height: 20px;position: relative;" class="collapse-content content_answer"><span style="position: absolute; top:5%;left: 30%; text-align: center;">{{index+1}}</span></div>
+  
+
+                        </div>
+
+
+                            
+                        
+
+
+
+
+                   
+                    
+                </div>
+                
+    
+
+        </div>
+        <div style="flex:6">
+            <div class="test1" style="overflow-y: auto; height: 200px;">
+                
+            </div>
+            
+        </div>
+
+    </div>
+    <div style="display: flex; flex: 5;background-color: white; flex-direction: column; justify-content: space-between;">
+        <div style="margin-top: 30px;">
+            <p style="margin-left: 100px; font-size: 20px;" id="question_main">ttettets</p>
+        </div>
+        <div style="margin-bottom: 50px;">
+
+
+
+            <div style="margin-left: 50px;">
+                <form action="">
+                <label>
+                    <input type="radio" name="select" value="A" > A<p style="display: inline-block; font-size: 20px;margin-left: 100px;" id="question_one">选项1</p>
+                  </label>
+                  <br>
+                      
+                <label>
+                    <input type="radio" name="select" value="B" >  B<p style="display: inline-block;margin-left: 100px; font-size: 20px;" id="question_two">选项2</p>
+                  </label>
+                  <br>
+                      
+                <label>
+                    <input type="radio" name="select" value="C" > C <p style="display: inline-block;margin-left: 100px; font-size: 20px;" id="question_three">选项3</p>
+                  </label>
+                  <br>
+                      
+                <label>
+                    <input type="radio" name="select" value="D" >D <p style="display: inline-block;margin-left: 100px; font-size: 20px;" id="question_four">选项四</p>
+                  </label>
+                  <br>
+                  
+                  <button id="submyself" type="button" @click="submitmyself" class="layui-btn layui-btn-primary" >提交本题</button>
+                </form>
+                <input checked id="defaultNextQuestion" type="checkbox" name="select" value="A" style="display: inline-block;">自动下一题
+
+            </div>
+
+            
+            
+            
+            <p style="margin-left: 100px; font-size: 20px; display: none;" id="question_correct">选项四</p>
+        </div>
+
+    </div>
+</div>
+<div id="footer" style="display: flex;">
+
+    <div style="width: 200px; align-items: center;">
+        <button id="test1" type="button" class="layui-btn layui-btn-fluid">流体按钮（宽度自适应）</button>
+      </div>
+<!-- 
+    <div style="flex:1;">
+        <button type="button" class="layui-btn layui-btn-primary" >按钮</button>
+        <button type="button" class="layui-btn layui-btn-normal" >按钮</button>
+    </div>
+    <div style="flex:5">
+        <button>test2</button>
+    </div>
+    <div style="flex:1;">
+        <button>test3</button>
+    </div> -->
+    <!-- //让div容器中的元素垂直居中 -->
+
+        
+    <div style="flex:1; display: flex;  justify-content: center; align-items: center;">
+        <span style="flex:1;">标记本题</span>
+
+        
+        <button type="button" @click="previewQuestion" class="layui-btn layui-btn-primary" >上一题</button>
+        <button v-if="changeIndex!=totalIndex" type="button" @click="nextQuestion" class="layui-btn layui-btn-normal" >下一题</button>
+        <button v-else type="button" @click="nextQuestion" class="layui-btn layui-btn-normal" >提交</button>
+
+    </div>
+
+    
+</div>
+
+</div>
+<script>
+
+    //获取浏览器可视窗口高度
+    var height = document.documentElement.clientHeight;
+    console.log(height);
+    //获取id为test1的元素高度
+    var test1 = document.getElementById('test1');
+    console.log(test1.offsetHeight);
+    //设置id为cotnent的元素高度为500px
+    var content = document.getElementById('content');
+    
+
+
+    //获取id为header的元素高度
+    var header = document.getElementById('header');
+    console.log(header.offsetHeight);
+    //获取id为footer的元素高度
+    var footer = document.getElementById('footer');
+    console.log(footer.offsetHeight);
+    content.style.height = height - header.offsetHeight - footer.offsetHeight-2 + 'px';
+
+
+    //监听窗口高度变化
+    window.onresize = function(){
+        var height = document.documentElement.clientHeight;
+        content.style.height = height - header.offsetHeight - footer.offsetHeight-2 + 'px';
+    }
+
+
+    let anwser_list = {}
+    let correct_list={}
+
+    let a = document.getElementById("defaultNextQuestion")
+    function test(event){
+        if(a.checked){
+            a.checked = false
+        }else{
+            a.checked = true
+        }
+    }
+    a.addEventListener('click',function(){
+        if(a.checked){
+            a.checked = false
+        }else{
+            a.checked = true
+        }
+    })
+
+    
+    let app = new Vue({
+        el: '#app',
+        data: {
+            items: Array.from({ length: 100 }, (_, index) => index),
+            msg:"helloworld",
+            t:[1,2,3,4,5,6],
+            question_content:{},
+            changeIndex:1,
+            totalIndex:0,
+            currentLogin:{},
+            answer_correct:[]
+            ,
+            
+            
+        },
+        methods: {
+            test: function(){
+                // axios.get('http://localhost:5500/assert/1.json').then((response)=>{
+                //    this.t = response.data.data
+                //     console.log()
+                //     //this.t.push(response.data.data)
+                    
+                // }).catch(function(error){
+                //     console.log(error);
+                // })
+                localStorage.getItem("question")
+                
+                this.t = JSON.parse(localStorage.getItem("ruankkao"))
+                if(this.t = null || this.t == undefined || JSON.stringify(this.t) == '{}'){
+                    this.t = [{"question": "线性表采用链表存储结构的特点中不包括 （1） 。","A": "所需空间大小与表长成正比","B": "可随机访问表中的任意元素","C": "插入和删除操作不需要移动元素","D": "无需事先估计存储空间大小",
+    "answer": "B"
+  },
+  {
+    "question": "在双核处理器中，双核是指 （2） 。",
+    "A": "执行程序时有两条指令流水线并行工作",
+    "B": "在一个 CPU 中集成两个运算核心以提高运算能力",
+    "C": "利用超线程技术实现的多任务并行处理",
+    "D": "在主板上设置两个独立的 CPU 以提高处理能力",
+    "answer": "B"
+  },
+  {
+    "question": "采用贪心策略求解 （3） 问题，一定可以得到最优解。",
+    "A": "分数背包",
+    "B": "0-1 背包",
+    "C": "旅行商",
+    "D": "最长公共子序列",
+    "answer": "A"
+  },
+  {
+    "question": "统一过程模型的四个阶段中，在 （4） 阶段进行需求分析和架构演进。",
+    "A": "移交",
+    "B": "精化",
+    "C": "构建",
+    "D": "起始",
+    "answer": "B"
+  },
+  {
+    "question": "下列协议中，不属于安全协议的是 （5） 。",
+    "A": "IPsec",
+    "B": "SNMP",
+    "C": "SFTP",
+    "D": "HTTPS",
+    "answer": "B"
+  },
+  {
+    "question": "以下关于汇编语言程序的叙述中，错误的是 （6） 。",
+    "A": "汇编程序的功能是将汇编语言源程序翻译为相应的目标程序",
+    "B": "用汇编语言编写的程序可以直接被计算机硬件执行",
+    "C": "汇编语言是低级程序设计语言",
+    "D": "汇编语言与计算机硬件体系结构密切相关",
+    "answer": "B"
+  },
+  {
+    "question": "以下关于方法重载（Overload）和方法覆盖（Override）与多态的关系的叙述中，不正确的是 （7） 。",
+    "A": "覆盖通过动态绑定机制实现多态",
+    "B": "重载通过动态绑定机制实现多态",
+    "C": "重载属于编译时多态，在一个类中定义多个名称相同而参数不同的方法",
+    "D": "覆盖属于运行时多态，子类重新定义父类中已定义的方法",
+    "answer": "B"
+  },
+  {
+    "question": "以下关于白盒测试原则的叙述中，不正确的是 （8） 。",
+    "A": "在所有的逻辑判断中，取“真”和取“假”的两种情况至少都能执行一次",
+    "B": "程序模块中的所有独立路径至少执行一次",
+    "C": "每个循环都应在边界条件和一般条件下各执行一次",
+    "D": "在输入条件规定的取值范围的情况下，合理的输入和不合理的输入至少都能执行一次",
+    "answer": "D"
+  },
+  {
+    "question": "对采用面向对象方法开发的系统进行测试时，通常从不同层次进行测试。对类中定义的每个方法进行测试属于 （9） 层。",
+    "A": "系统",
+    "B": "算法",
+    "C": "类",
+    "D": "模板",
+    "answer": "B"
+  },
+  {
+    "question": "下列算法中，不属于公开密钥加密算法的是 （10） 。",
+    "A": "DSA",
+    "B": "ECC",
+    "C": "DES",
+    "D": "RSA",
+    "answer": "C"
+  },
+  {
+    "question": "POP3 服务默认的 TCP 端口号是 （11） 。",
+    "A": "110",
+    "B": "25",
+    "C": "20",
+    "D": "80",
+    "answer": "A"
+  },
+  {
+    "question": "以下关于折半查找的叙述中，不正确的是 （12） 。采用折半查找等概率查找某个包含 8 个元素的有序表，查找成功的平均查找长度为 （13） 。",
+    "A": "是一个分治算法",
+    "B": "只能应用于有序表",
+    "C": "查找成功和不成功的平均查找长度是一样的",
+    "D": "若表长为 n，时间复杂度为O(log2 n)",
+    "answer": "C"
+  },
+  {
+    "question": "某文件管理系统在磁盘上建立了位示图（bitmap），记录磁盘的使用情况。若计算机系统的字长为 128 位，磁盘的容量为 1024GB，物理块的大小为 8MB，那么该位示图的大小为 （14） 个字。",
+    "A": "4096",
+    "B": "1024",
+    "C": "2048",
+    "D": "4098",
+    "answer": "B"
+  },
+  {
+    "question": "在项目开发过程中， （15） 不属于项目估算的主要因素。",
+    "A": "规模",
+    "B": "类型",
+    "C": "成本",
+    "D": "工作量",
+    "answer": "B"
+  },
+  {
+    "question": "执行以下 Python 语句之后，列表 X 为 （16） 。",
+    "A": "[1, 2, 3, 4, 5]",
+    "B": "[1, 2, 3]",
+    "C": "[4, 5]",
+    "D": "[1, 2, 3, [4,5]]",
+    "answer": "D"
+  },
+  {
+    "question": "防火墙不具备 （17） 功能。",
+    "A": "病毒防治",
+    "B": "状态检测",
+    "C": "代理",
+    "D": "包过滤",
+    "answer": "A"
+  },
+  {
+    "question": "一棵哈夫曼树共有 127 个结点，对其进行哈夫曼编码，共能得到 （18） 个字符的编码。",
+    "A": "64",
+    "B": "127",
+    "C": "63",
+    "D": "126",
+    "answer": "A"
+  },
+  {
+    "question": "浮点加（减）法运算过程中需要以下操作要素：\n① 零操作数检查\n② 规格化及舍入处理\n③ 尾数加（减）法运算\n④ 对阶操作\n正确的加（减）法运算操作流程是 （19） 。",
+    "A": "①③④②",
+    "B": "①④③②",
+    "C": "②①④③",
+    "D": "④③②①",
+    "answer": "B"
+  },
+  {
+    "question": "某队列允许在其两端进行入队操作，但仅允许在一端进行出队操作。若元素 a、b、c、d 依次全部入队列，之后进行出队列操作，则不能得到的出队序列是 （20） 。",
+    "A": "dbac",
+    "B": "cabd",
+    "C": "acdb",
+    "D": "bacd",
+    "answer": "C"
+  },
+  {
+    "question": "以下关于基于构件的开发模型的叙述中，不正确的是 （21） 。",
+    "A": "本质上是演进模型，以迭代方式构建软件",
+    "B": "必须采用面向对象开发技术",
+    "C": "采用预先打包的软件构件构造软件",
+    "D": "构件可以是组织内部开发的，也可以是商品化成品软件构件",
+    "answer": "B"
+  },
+  {
+    "question": "在 C/C++程序中，对于函数中定义的非静态局部变量，其存储空间在 （22） 分配。",
+    "A": "栈区",
+    "B": "静态数据区",
+    "C": "文本区",
+    "D": "自由堆区",
+    "answer": "A"
+  },
+  {
+    "question": "以下关于测试原则的叙述中，不正确的是 （23） 。",
+    "A": "充分注意测试中的群集现象",
+    "B": "设计测试用例时，应包括合理的输入条件和不合理的输入条件",
+    "C": "应该由程序员测试自己编写的程序",
+    "D": "严格执行测试计划，避免测试的随意性",
+    "answer": "C"
+  },
+  {
+    "question": "在微型计算机中，管理键盘最适合采用的 I/O 控制方式是 （24） 方式。",
+    "A": "DMA",
+    "B": "无条件传送",
+    "C": "程序查询",
+    "D": "中断",
+    "answer": "D"
+  },
+  {
+    "question": "当一棵非空二叉树的 （25） 时，对该二叉树进行中序遍历和后序遍历所得到的序列相同。",
+    "A": "每个非叶子结点都只有左子树",
+    "B": "每个非叶子结点都只有右子树",
+    "C": "每个非叶子结点的度都;"
+
+    }]
+                console.log(this.t)
+            }
+            },
+            handleClick:function(event){
+
+                let index = (event.target.innerText)
+                this.changeQuestion(index)
+                console.log(this.t[index].question)
+                changeIndex = index;
+                console.log(changeIndex)
+
+
+                //为event 目标添加css类select_item
+                //event.target.classList.add('select_item');
+                //this.currentIndex.target.classList.remove('select_item')
+                this.currentIndex = event;
+                console.log(this.currentIndex)
+                
+            },
+            changeQuestion:function(index){
+                
+                let main = document.getElementById("question_main")
+                let one = document.getElementById("question_one")
+                let two = document.getElementById("question_two")
+                let three = document.getElementById("question_three")
+                let four = document.getElementById("question_four")
+                let correct = document.getElementById("question_correct")
+                main.innerText =(index+1)+ this.t[index].question
+                one.innerText = this.t[index].A
+                two.innerText = this.t[index].B
+                three.innerText = this.t[index].C
+                four.innerText = this.t[index].D
+                correct.innerText = this.t[index].anwser
+                console.log(this.t[index])
+            },
+            nextQuestion:function(){
+                let a = document.getElementById("defaultNextQuestion")
+                a.checked = a.checked
+                this.changeQuestion(this.changeIndex+1)
+                
+                anwser_list[this.changeIndex ] =  this.submitOneAnwser()
+                this.changeIndex= this.changeIndex+1
+                this.cancleRadioSelect();
+                if(anwser_list[this.changeIndex]){
+                        console.log("已经回答过了" + anwser_list[this.changeIndex - 1])
+                        this.setRadionSelect(anwser_list[this.changeIndex])
+
+                    }
+            },
+            previewQuestion:function(){
+                if(this.changeIndex >=1){
+                    this.changeQuestion(this.changeIndex-1)
+                    if(anwser_list[this.changeIndex - 1]){
+                        console.log("已经回答过了" + anwser_list[this.changeIndex - 1])
+                        this.setRadionSelect(anwser_list[this.changeIndex - 1])
+
+                    }
+                    this.changeIndex = this.changeIndex -1
+                    
+                }
+                
+            },
+            submitOneAnwser:function(event){
+                
+                        console.log("test-提交本题"); 
+                        // 获取所有名为'gender'的单选框
+                        var radios = document.getElementsByName('select');
+                        
+                        // 遍历单选框，查找被选中的项
+                        for (var i = 0; i < radios.length; i++) {
+                            if (radios[i].checked) {
+                            // 找到被选中的单选框，获取其值
+                            var value = radios[i].value;
+                            if(value == this.t[this.changeIndex].answer){
+                                // if(event.target.id = "submyself"){
+                                //     alert("回答正确")
+                                // }
+                            }else{
+                                // if(event.target.id = "submyself"){
+                                //     alert("回答错误")
+                                // }
+                            }
+                            return value;
+                            }
+                        }
+                        
+                        // 如果没有单选框被选中，返回null或相应的提示
+                       // alert('没有选中选项，请选择一个选项');
+                        return null;
+            },
+            cancleRadioSelect:function(){
+                var radios = document.getElementsByName('select');
+                        
+                        // 遍历单选框，查找被选中的项
+                        for (var i = 0; i < radios.length; i++) {
+                            if (radios[i].checked) {
+                            // 找到被选中的单选框，获取其值
+                            radios[i].checked =false
+                            }
+                        }
+            },
+            setRadionSelect:function(rec){
+                var radios = document.getElementsByName('select');
+                        
+                        // 遍历单选框，查找被选中的项
+                        for (var i = 0; i < radios.length; i++) {
+                            if (radios[i].value == rec) {
+                            // 找到被选中的单选框，获取其值
+                            radios[i].checked =true
+                            }
+                        }
+            },
+            submitmyself:function(event){
+                console.log("test-提交本题"); 
+                        // 获取所有名为'gender'的单选框
+                        var radios = document.getElementsByName('select');
+                        
+                        // 遍历单选框，查找被选中的项
+                        for (var i = 0; i < radios.length; i++) {
+                            if (radios[i].checked) {
+                            // 找到被选中的单选框，获取其值
+                            var value = radios[i].value;
+                            if(value == this.t[this.changeIndex].answer){
+                                console.log(value)
+                                console.log(this.t[this.changeIndex].answer)
+                                if(event.target.id = "submyself"){
+                                    alert("回答正确")
+                                }
+                                let a = document.getElementById("defaultNextQuestion")
+                                if(a.checked){
+                                    this.nextQuestion()
+                                }
+                            }else{
+                                console.log(value +"答案")
+                                console.log(this.t[this.changeIndex].anwser)
+                                console.log(this.t[0].answer)
+                                
+                                if(event.target.id = "submyself"){
+                                    alert("回答错误")
+                                }
+                            }
+                            return value;
+                            }
+                        }
+                        
+                        // 如果没有单选框被选中，返回null或相应的提示
+                        //alert('没有选中选项，请选择一个选项');
+                        return null;
+            }
+            
+        },
+        mounted: function(){
+            this.test()
+            currentLogin = JSON.parse(localStorage.getItem('currentLogin'));
+                console.log(currentLogin);
+                if(currentLogin == null || currentLogin == undefined || JSON.stringify(currentLogin) =='{}'){
+                    this.currentLogin = {};
+                }else{
+                    console.log("执行到这里啦")
+                    this.currentLogin = currentLogin;
+                    this.flag = 1;
+                }
+            setTimeout(() => {
+                this.changeQuestion(0);
+                let tmp = this.t;
+                this.totalIndex = this.t.length;
+                for(let i=0; i<tmp.length;i++){
+                    console.log(tmp[i])
+                    correct_list[i] = tmp[i].anwser;
+                }
+
+            }, 1000);
+
+
+            
+
+        
+        }
+    })
+
+
+    // //获取content_answer类名元素
+    // let elements;
+    // setTimeout(() => {
+    //     elements= document.querySelectorAll('.content_answer');
+    // elements.forEach(element => {
+    // element.addEventListener('click', (event) => {
+    //     // 在这里处理点击事件
+
+    //     console.log('Element clicked:', event.target);
+    // });
+    // });
+
+    // }, 2000);
+    
+
+
+</script>
+
+
+    
+</body>
+</html>

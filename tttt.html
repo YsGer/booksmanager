@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录页面布局</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .form-button:hover {
+            background-color: #4cae4c;
+        }
+        .social-login {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .social-login p {
+            margin-bottom: 10px;
+        }
+        .social-login a {
+            display: inline-block;
+            margin: 0 5px;
+            color: #333;
+            text-decoration: none;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .social-login a:hover {
+            background-color: #f0f0f0;
+        }
+        a{
+          text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>登录</h2>
+        <form>
+            <div class="form-group">
+                <label for="username">用户名/邮箱/手机号:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">密码:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="form-button">登录</button>
+            </div>
+        </form>
+        <div class="mb-7.5 flex w-full text-xs" style="display: flex;">
+          <span style="flex: 4;" class="dark:text-white">还没有账号？</span><a style="flex: 3;" class="mr-auto text-green-800" href="">去注册</a><a style="flex:3;" class="text-green-800" href="/bayaccount/reset">忘记密码？</a>
+        </div>
+        <div class="social-login">
+            <p>使用社交账号登录:</p>
+            <a href="#">微信</a>
+            <a href="#">微博</a>
+            <a href="#">手机号</a>
+        </div>
+    </div>
+</body>
+</html>
